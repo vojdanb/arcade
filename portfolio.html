@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio — Arcade LinkedIn Agency</title>
+  <meta name="description" content="Case studies and results from Arcade's LinkedIn content work with B2B SaaS founders.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: var(--sky); min-height: 100vh; overflow-x: hidden; height: auto; }
+    .page-content { padding-top: 60px; }
+
+    /* ===== HERO ===== */
+    .portfolio-hero {
+      background: linear-gradient(180deg, #2C1810 0%, #5C3A28 100%);
+      padding: 60px 24px 48px;
+      text-align: center;
+      border-bottom: 6px solid var(--gold);
+      position: relative;
+      overflow: hidden;
+    }
+    .portfolio-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      right: 0;
+      height: 16px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--gold) 0px, var(--gold) 16px,
+        #C9961A 16px, #C9961A 20px
+      );
+    }
+
+    /* Scanline effect */
+    .portfolio-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+    }
+
+    .portfolio-hero .eyebrow {
+      font-family: var(--font-pixel);
+      font-size: 9px;
+      color: var(--gold);
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .portfolio-hero h1 {
+      font-family: var(--font-pixel);
+      font-size: clamp(18px, 4vw, 32px);
+      color: var(--gold);
+      text-shadow: 4px 4px 0 var(--coral), 8px 8px 0 var(--coral-dark);
+      margin-bottom: 16px;
+      line-height: 1.4;
+      letter-spacing: 3px;
+    }
+    .portfolio-hero .sub {
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--cream);
+      max-width: 500px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    /* Blinking arcade border */
+    .arcade-border {
+      display: inline-block;
+      border: 4px solid var(--gold);
+      padding: 8px 20px;
+      margin-bottom: 24px;
+      font-family: var(--font-pixel);
+      font-size: 8px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      animation: border-blink 2s ease-in-out infinite;
+    }
+    @keyframes border-blink {
+      0%, 80%, 100% { border-color: var(--gold); color: var(--gold); }
+      40% { border-color: var(--coral); color: var(--coral); }
+    }
+
+    /* ===== STATS BAR ===== */
+    .stats-bar {
+      background: var(--pixel-dark);
+      border-bottom: 4px solid var(--gold);
+      padding: 20px 24px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: var(--font-pixel);
+      font-size: clamp(16px, 3vw, 24px);
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-family: var(--font-pixel);
+      font-size: 7px;
+      color: var(--cream);
+      letter-spacing: 1px;
+      opacity: 0.8;
+    }
+
+    /* ===== CASE STUDIES ===== */
+    .cases-section {
+      background: var(--cream);
+      padding: 60px 24px;
+    }
+    .cases-title {
+      font-family: var(--font-pixel);
+      font-size: clamp(10px, 2vw, 16px);
+      color: var(--pixel-dark);
+      text-align: center;
+      letter-spacing: 2px;
+      margin-bottom: 48px;
+      line-height: 1.6;
+    }
+    .cases-title span { color: var(--coral); }
+
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Cabinet-style card */
+    .cabinet-card {
+      background: var(--pixel-dark);
+      border: 4px solid var(--gold);
+      box-shadow: 8px 8px 0 #C9961A;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cabinet-card:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: 12px 12px 0 #C9961A;
+    }
+
+    /* Cabinet top marquee */
+    .cabinet-marquee {
+      background: var(--gold);
+      padding: 8px 16px;
+      border-bottom: 4px solid var(--pixel-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cabinet-marquee-title {
+      font-family: var(--font-pixel);
+      font-size: 7px;
+      color: var(--pixel-dark);
+      letter-spacing: 1px;
+    }
+    .cabinet-marquee-score {
+      font-family: var(--font-pixel);
+      font-size: 8px;
+      color: var(--pixel-dark);
+    }
+
+    /* Video screen */
+    .video-screen {
+      position: relative;
+      background: #000;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      border: 4px solid #1A0808;
+    }
+    .video-screen iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    /* Placeholder screen */
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1A0808 0%, #2C1810 50%, #1A1A2E 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .video-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 2px,
+        rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 3px
+      );
+    }
+    .play-btn {
+      width: 56px;
+      height: 56px;
+      background: var(--coral);
+      border: 4px solid var(--coral-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.1s;
+      margin-bottom: 12px;
+      box-shadow: 4px 4px 0 var(--coral-dark);
+      z-index: 1;
+    }
+    .play-btn:hover { transform: scale(1.08); }
+    .video-title {
+      font-family: var(--font-pixel);
+      font-size: 7px;
+      color: var(--gold);
+      text-align: center;
+      padding: 0 16px;
+      z-index: 1;
+      letter-spacing: 1px;
+      line-height: 1.6;
+    }
+    /* CRT effect overlay */
+    .crt-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.5) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Cabinet body / info panel */
+    .cabinet-info {
+      background: #1A0808;
+      padding: 16px;
+      border-top: 4px solid var(--gold);
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .info-context {
+      font-family: var(--font-pixel);
+      font-size: 7px;
+      color: var(--teal);
+      letter-spacing: 1px;
+      line-height: 1.4;
+    }
+    .info-result-badge {
+      font-family: var(--font-pixel);
+      font-size: 6px;
+      background: var(--gold);
+      color: var(--pixel-dark);
+      padding: 4px 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .metrics-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .metric-pill {
+      font-family: var(--font-pixel);
+      font-size: 6px;
+      background: rgba(42,157,143,0.2);
+      color: var(--teal);
+      border: 2px solid var(--teal-dark);
+      padding: 4px 8px;
+      letter-spacing: 0.5px;
+    }
+    .metric-pill.coral {
+      background: rgba(232,85,62,0.2);
+      color: #F47D67;
+      border-color: var(--coral);
+    }
+    .metric-pill.gold {
+      background: rgba(244,197,66,0.2);
+      color: var(--gold);
+      border-color: #C9961A;
+    }
+
+    /* Cabinet controls decoration */
+    .cabinet-controls {
+      background: #2C1810;
+      padding: 10px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      border-top: 3px solid #3E1A0A;
+    }
+    .control-btn {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    .btn-red { background: #E8553E; }
+    .btn-blue { background: #2980B9; }
+    .btn-green { background: #27AE60; }
+    .btn-yellow { background: var(--gold); }
+    .control-stick {
+      width: 8px; height: 20px;
+      background: #5C3A28;
+      border: 2px solid #3E1A0A;
+      border-radius: 4px;
+      margin-left: auto;
+    }
+
+    /* ===== COMING SOON CARD ===== */
+    .coming-soon-card {
+      background: var(--pixel-dark);
+      border: 4px dashed var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      padding: 32px;
+      text-align: center;
+    }
+    .coming-soon-card p {
+      font-family: var(--font-pixel);
+      font-size: 9px;
+      color: var(--gold);
+      line-height: 1.8;
+      letter-spacing: 1px;
+      margin-top: 16px;
+    }
+
+    /* ===== CTA ===== */
+    .portfolio-cta {
+      background: var(--sky);
+      padding: 80px 24px;
+      text-align: center;
+      position: relative;
+    }
+    .portfolio-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: var(--gold);
+    }
+    .portfolio-cta h2 {
+      font-family: var(--font-pixel);
+      font-size: clamp(12px, 2.5vw, 20px);
+      color: var(--pixel-dark);
+      text-shadow: 3px 3px 0 var(--coral);
+      margin-bottom: 16px;
+      line-height: 1.6;
+      letter-spacing: 2px;
+    }
+    .portfolio-cta p {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--pixel-mid);
+      max-width: 500px;
+      margin: 0 auto 28px;
+    }
+
+    /* Reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes idle-bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="arcade-nav">
+  <a href="index.html" class="nav-logo"><span>▶</span> ARCADE</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">HOME</a></li>
+    <li><a href="services.html">SERVICES</a></li>
+    <li><a href="portfolio.html" class="active">PORTFOLIO</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#audit-form" class="btn-nav-cta">FREE AUDIT</a>
+    <button class="mute-btn" id="muteBtn">🔊</button>
+    <button class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-content">
+
+  <!-- HERO -->
+  <div class="portfolio-hero">
+    <span class="eyebrow">★ HALL OF FAME ★</span>
+    <div class="arcade-border blink">HIGH SCORES — TOP PLAYS</div>
+    <h1>OUR GREATEST HITS</h1>
+    <p class="sub">Real content. Real numbers. Real clients who leveled up their LinkedIn game.</p>
+  </div>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num">10M+</span>
+      <span class="stat-label">IMPRESSIONS</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">47%</span>
+      <span class="stat-label">AVG ENGAGEMENT LIFT</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">200+</span>
+      <span class="stat-label">INBOUND LEADS</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">12</span>
+      <span class="stat-label">B2B SAAS CLIENTS</span>
+    </div>
+  </div>
+
+  <!-- CASE STUDIES -->
+  <section class="cases-section">
+    <div class="cases-title">
+      CASE STUDIES — <span>THE WINS</span> — HALL OF FAME
+    </div>
+
+    <div class="cases-grid">
+
+      <!-- Case 1 -->
+      <div class="cabinet-card reveal">
+        <div class="cabinet-marquee">
+          <span class="cabinet-marquee-title">CASE STUDY #001</span>
+          <span class="cabinet-marquee-score">🏆 TOP SCORE</span>
+        </div>
+        <div class="video-screen">
+          <div class="video-placeholder">
+            <div class="play-btn">▶</div>
+            <div class="video-title">FROM 200 TO 45,000<br>IMPRESSIONS / POST</div>
+            <div class="crt-overlay"></div>
+          </div>
+        </div>
+        <div class="cabinet-info">
+          <div class="info-row">
+            <span class="info-context">B2B SAAS — SERIES A<br>FOUNDER BRAND BUILD</span>
+            <span class="info-result-badge">+22,400% REACH</span>
+          </div>
+          <div class="metrics-row">
+            <span class="metric-pill">45K impressions/post</span>
+            <span class="metric-pill coral">312% more replies</span>
+            <span class="metric-pill gold">18 inbound demos</span>
+          </div>
+        </div>
+        <div class="cabinet-controls">
+          <div class="control-btn btn-red"></div>
+          <div class="control-btn btn-blue"></div>
+          <div class="control-btn btn-green"></div>
+          <div class="control-btn btn-yellow"></div>
+          <div class="control-stick"></div>
+        </div>
+      </div>
+
+      <!-- Case 2 -->
+      <div class="cabinet-card reveal">
+        <div class="cabinet-marquee">
+          <span class="cabinet-marquee-title">CASE STUDY #002</span>
+          <span class="cabinet-marquee-score">🥈 HIGH SCORE</span>
+        </div>
+        <div class="video-screen">
+          <div class="video-placeholder" style="background:linear-gradient(135deg,#0A1628 0%,#1A2C4E 50%,#0A1E3D 100%);">
+            <div class="play-btn" style="background:var(--teal);border-color:var(--teal-dark);">▶</div>
+            <div class="video-title" style="color:var(--teal);">CAROUSEL STRATEGY<br>THAT WENT VIRAL</div>
+            <div class="crt-overlay"></div>
+          </div>
+        </div>
+        <div class="cabinet-info">
+          <div class="info-row">
+            <span class="info-context">HR TECH — SMB SAAS<br>CONTENT STRATEGY</span>
+            <span class="info-result-badge" style="background:var(--teal);color:#fff;">7 VIRAL POSTS</span>
+          </div>
+          <div class="metrics-row">
+            <span class="metric-pill">150K+ carousel saves</span>
+            <span class="metric-pill coral">4.2% engagement rate</span>
+            <span class="metric-pill gold">31 qualified leads</span>
+          </div>
+        </div>
+        <div class="cabinet-controls">
+          <div class="control-btn btn-yellow"></div>
+          <div class="control-btn btn-red"></div>
+          <div class="control-btn btn-blue"></div>
+          <div class="control-btn btn-green"></div>
+          <div class="control-stick"></div>
+        </div>
+      </div>
+
+      <!-- Case 3 -->
+      <div class="cabinet-card reveal">
+        <div class="cabinet-marquee">
+          <span class="cabinet-marquee-title">CASE STUDY #003</span>
+          <span class="cabinet-marquee-score">🥉 GREAT SCORE</span>
+        </div>
+        <div class="video-screen">
+          <div class="video-placeholder" style="background:linear-gradient(135deg,#1A0A28 0%,#2E1A50 50%,#1A0A3D 100%);">
+            <div class="play-btn" style="background:#9B59B6;border-color:#7D3C98;">▶</div>
+            <div class="video-title" style="color:#C39BD3;">PROFILE OVERHAUL<br>→ 3X INBOUND RATE</div>
+            <div class="crt-overlay"></div>
+          </div>
+        </div>
+        <div class="cabinet-info">
+          <div class="info-row">
+            <span class="info-context">FINTECH — SEED STAGE<br>PROFILE OPTIMIZATION</span>
+            <span class="info-result-badge" style="background:#9B59B6;color:#fff;">3X INBOUND</span>
+          </div>
+          <div class="metrics-row">
+            <span class="metric-pill">Profile views up 280%</span>
+            <span class="metric-pill coral">ConnectionsReq+190%</span>
+            <span class="metric-pill gold">9 investor meetings</span>
+          </div>
+        </div>
+        <div class="cabinet-controls">
+          <div class="control-btn btn-blue"></div>
+          <div class="control-btn btn-green"></div>
+          <div class="control-btn btn-yellow"></div>
+          <div class="control-btn btn-red"></div>
+          <div class="control-stick"></div>
+        </div>
+      </div>
+
+      <!-- Case 4 -->
+      <div class="cabinet-card reveal">
+        <div class="cabinet-marquee">
+          <span class="cabinet-marquee-title">CASE STUDY #004</span>
+          <span class="cabinet-marquee-score">⭐ STAR PLAYER</span>
+        </div>
+        <div class="video-screen">
+          <div class="video-placeholder" style="background:linear-gradient(135deg,#1A1400 0%,#3D2E00 50%,#1A1A00 100%);">
+            <div class="play-btn" style="background:var(--gold);border-color:#C9961A;color:#2C1810;">▶</div>
+            <div class="video-title" style="color:var(--gold);">PERSONAL BRAND<br>THAT CLOSED DEALS</div>
+            <div class="crt-overlay"></div>
+          </div>
+        </div>
+        <div class="cabinet-info">
+          <div class="info-row">
+            <span class="info-context">ENTERPRISE SAAS<br>FOUNDER BRAND</span>
+            <span class="info-result-badge">$2.4M PIPELINE</span>
+          </div>
+          <div class="metrics-row">
+            <span class="metric-pill">8K new followers/90d</span>
+            <span class="metric-pill coral">27 enterprise leads</span>
+            <span class="metric-pill gold">$2.4M attributed</span>
+          </div>
+        </div>
+        <div class="cabinet-controls">
+          <div class="control-btn btn-green"></div>
+          <div class="control-btn btn-yellow"></div>
+          <div class="control-btn btn-red"></div>
+          <div class="control-btn btn-blue"></div>
+          <div class="control-stick"></div>
+        </div>
+      </div>
+
+      <!-- Case 5 -->
+      <div class="cabinet-card reveal">
+        <div class="cabinet-marquee">
+          <span class="cabinet-marquee-title">CASE STUDY #005</span>
+          <span class="cabinet-marquee-score">🔥 ON FIRE</span>
+        </div>
+        <div class="video-screen">
+          <div class="video-placeholder" style="background:linear-gradient(135deg,#1A0A08 0%,#3D1A0A 50%,#2C1810 100%);">
+            <div class="play-btn" style="background:#E67E22;border-color:#CA6F1E;">▶</div>
+            <div class="video-title" style="color:#F0A060;">COMPANY PAGE<br>0 TO 10K FOLLOWERS</div>
+            <div class="crt-overlay"></div>
+          </div>
+        </div>
+        <div class="cabinet-info">
+          <div class="info-row">
+            <span class="info-context">DEVTOOLS — GROWTH STAGE<br>COMPANY PAGE POSTING</span>
+            <span class="info-result-badge" style="background:#E67E22;color:#fff;">10K IN 90 DAYS</span>
+          </div>
+          <div class="metrics-row">
+            <span class="metric-pill">0 → 10,400 followers</span>
+            <span class="metric-pill coral">220% reply rate lift</span>
+            <span class="metric-pill gold">44 community mentions</span>
+          </div>
+        </div>
+        <div class="cabinet-controls">
+          <div class="control-btn btn-red"></div>
+          <div class="control-btn btn-green"></div>
+          <div class="control-btn btn-yellow"></div>
+          <div class="control-btn btn-blue"></div>
+          <div class="control-stick"></div>
+        </div>
+      </div>
+
+      <!-- Coming Soon -->
+      <div class="cabinet-card coming-soon-card reveal">
+        <div style="font-size:40px;animation:idle-bob 1.5s ease-in-out infinite;">🎮</div>
+        <p>NEXT CASE STUDY<br>LOADING...<br><br>
+        <span class="blink" style="font-size:8px;">▓▓▓▓▓░░░░░ 64%</span></p>
+        <a href="index.html#audit-form" class="pixel-btn pixel-btn-gold" style="margin-top:24px;font-size:7px;padding:10px 16px;">
+          COULD BE YOU →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="portfolio-cta">
+    <h2>WANT YOUR NAME<br>ON THE LEADERBOARD?</h2>
+    <p>Join the B2B SaaS founders who stopped posting boring content and started generating real pipeline from LinkedIn.</p>
+    <a href="index.html#audit-form" class="pixel-btn pixel-btn-primary" style="margin-right:16px;">GET FREE AUDIT ▶</a>
+    <a href="services.html" class="pixel-btn pixel-btn-secondary">VIEW SERVICES →</a>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="arcade-footer">
+  <p>© 2024 ARCADE CONTENT AGENCY — ALL RIGHTS RESERVED</p>
+  <p style="margin-top:4px;color:var(--cream);opacity:0.6;font-size:7px;">GAME OVER? NEVER.</p>
+  <ul class="footer-links">
+    <li><a href="index.html">HOME</a></li>
+    <li><a href="services.html">SERVICES</a></li>
+    <li><a href="portfolio.html">PORTFOLIO</a></li>
+    <li><a href="about.html">ABOUT</a></li>
+  </ul>
+</footer>
+
+<script src="js/sounds.js"></script>
+<script>
+const sounds = window.arcade.sounds;
+let muted = false;
+document.getElementById('muteBtn').addEventListener('click', () => {
+  muted = !muted;
+  document.getElementById('muteBtn').textContent = muted ? '🔇' : '🔊';
+  sounds.muted = muted;
+});
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('a, button, .play-btn').forEach(el => {
+  el.addEventListener('click', () => { if (!muted) sounds.click(); });
+});
+
+// Animate stats counter
+function animateCounters() {
+  document.querySelectorAll('.stat-num').forEach(el => {
+    const text = el.textContent;
+    const num = parseFloat(text.replace(/[^0-9.]/g, ''));
+    const suffix = text.replace(/[0-9.]/g, '');
+    let start = 0;
+    const step = num / 40;
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= num) { start = num; clearInterval(timer); }
+      const display = num % 1 === 0 ? Math.floor(start) : start.toFixed(1);
+      el.textContent = display + suffix;
+    }, 30);
+  });
+}
+const statsBar = document.querySelector('.stats-bar');
+const statsObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) { animateCounters(); statsObs.disconnect(); }
+}, { threshold: 0.3 });
+statsObs.observe(statsBar);
+
+// Reveal
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      const idx = Array.from(reveals).indexOf(entry.target);
+      setTimeout(() => entry.target.classList.add('visible'), (idx % 3) * 120);
+      revealObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>
