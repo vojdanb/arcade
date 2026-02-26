@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arcade — B2B Content That Actually Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Cabinet+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
+:root {
+  --dark:    #0a0a14;
+  --dark2:   #13131f;
+  --dark3:   #1c1c2e;
+  --pink:    #ff2d6f;
+  --yellow:  #f5c800;
+  --blue:    #3557ff;
+  --mint:    #00c48c;
+  --orange:  #ff6230;
+  --sky:     #4dc9f0;
+  --white:   #ffffff;
+  --off:     #f7f7fc;
+  --border:  rgba(0,0,0,0.08);
+  --txt:     #0a0a14;
+  --txt2:    #4a4a68;
+  --txt3:    #9898b8;
+}
+
+/* ═══════════════════════════════════════
+   RESET + BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--off);
+  color: var(--txt);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; }
+
+/* ═══════════════════════════════════════
+   PAGE SYSTEM
+═══════════════════════════════════════ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 52px;
+  background: rgba(10,10,20,0.96);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ── LOGO: Abstract geometric mark ── */
+.nav-logo { display:flex; align-items:center; gap:13px; cursor:pointer; }
+
+.logo-mark {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+/* Geometric logo: two overlapping rotated squares forming a diamond / cross */
+.logo-mark svg { width:36px; height:36px; }
+
+.nav-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  color: white;
+}
+.nav-name .a1 { color: var(--pink); }
+.nav-name .a2 { color: var(--yellow); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: color .2s, background .2s;
+}
+.nav-links a:hover { color:white; background:rgba(255,255,255,0.07); }
+.nav-links a.active { color:white; }
+.nav-cta {
+  background: var(--pink) !important;
+  color: white !important;
+  border-radius: 10px !important;
+  padding: 10px 22px !important;
+  font-weight: 700 !important;
+  transition: opacity .2s, transform .15s !important;
+}
+.nav-cta:hover { opacity:.88 !important; transform:translateY(-1px) !important; }
+
+/* ═══════════════════════════════════════
+   SHARED UTILITIES
+═══════════════════════════════════════ */
+.page-wrap { padding-top: 68px; }
+
+.tag {
+  display: inline-block;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 99px;
+  margin-bottom: 20px;
+}
+.tag-pink   { color:var(--pink);   background:rgba(255,45,111,0.09);  border:1px solid rgba(255,45,111,0.2); }
+.tag-blue   { color:var(--blue);   background:rgba(53,87,255,0.08);   border:1px solid rgba(53,87,255,0.18); }
+.tag-mint   { color:var(--mint);   background:rgba(0,196,140,0.08);   border:1px solid rgba(0,196,140,0.18); }
+.tag-yellow { color:#9a7c00;       background:rgba(245,200,0,0.1);    border:1px solid rgba(245,200,0,0.25); }
+.tag-sky    { color:var(--sky);    background:rgba(77,201,240,0.09);  border:1px solid rgba(77,201,240,0.2); }
+.tag-white  { color:rgba(255,255,255,.6); background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); }
+
+h1, h2, h3 { font-family:'Syne',sans-serif; font-weight:800; line-height:1.1; }
+
+.sec-title { font-size:clamp(28px,4vw,48px); color:var(--txt); margin-bottom:16px; }
+.sec-title.light { color:white; }
+.sec-sub { font-size:17px; color:var(--txt2); line-height:1.75; max-width:520px; }
+.sec-sub.light { color:rgba(255,255,255,.5); }
+.sec-head { margin-bottom:56px; }
+.sec-head .sec-sub { margin-top:12px; }
+.sec-head.center { text-align:center; }
+.sec-head.center .sec-sub { margin:12px auto 0; }
+
+/* Buttons */
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Syne',sans-serif; font-weight:700;
+  border-radius:12px; cursor:pointer; transition:all .2s;
+  text-decoration:none; border:none;
+}
+.btn-lg { font-size:15px; padding:16px 32px; }
+.btn-md { font-size:14px; padding:13px 26px; }
+.btn-sm { font-size:13px; padding:10px 20px; }
+
+.btn-pink  { background:var(--pink);  color:white; box-shadow:0 4px 16px rgba(255,45,111,.3); }
+.btn-pink:hover  { opacity:.88; transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,45,111,.35); }
+
+.btn-dark  { background:var(--dark);  color:white; box-shadow:0 4px 14px rgba(0,0,0,.2); }
+.btn-dark:hover  { opacity:.88; transform:translateY(-2px); }
+
+.btn-ghost { background:transparent; color:white; border:1.5px solid rgba(255,255,255,.2); }
+.btn-ghost:hover { border-color:rgba(255,255,255,.45); background:rgba(255,255,255,.05); }
+
+.btn-outline-dark { background:transparent; color:var(--txt); border:1.5px solid rgba(0,0,0,.15); }
+.btn-outline-dark:hover { border-color:rgba(0,0,0,.3); background:rgba(0,0,0,.03); }
+
+/* Cards */
+.card {
+  background:white;
+  border-radius:20px;
+  border:1px solid var(--border);
+  box-shadow:0 2px 20px rgba(0,0,0,.05);
+  transition:transform .2s, box-shadow .2s;
+}
+.card:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,.09); }
+
+/* Fade animation */
+.fade { opacity:0; transform:translateY(22px); transition:opacity .55s ease, transform .55s ease; }
+.fade.in { opacity:1; transform:translateY(0); }
+
+/* CTA strip at bottom of pages */
+.cta-strip {
+  background:var(--dark);
+  padding:80px 52px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.cta-strip::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(255,45,111,.12), transparent);
+  pointer-events:none;
+}
+.cta-strip h2 { color:white; font-size:clamp(26px,3.5vw,44px); margin-bottom:14px; position:relative; z-index:1; max-width:600px; margin-left:auto; margin-right:auto; }
+.cta-strip p  { color:rgba(255,255,255,.45); font-size:17px; max-width:440px; margin:0 auto 36px; position:relative; z-index:1; line-height:1.7; }
+.cta-strip .btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+
+/* Footer */
+footer {
+  background:var(--dark2);
+  border-top:1px solid rgba(255,255,255,.05);
+  padding:32px 52px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;
+}
+.foot-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:15px; color:white; letter-spacing:.05em; }
+.foot-logo .a1 { color:var(--pink); }
+.foot-copy { font-size:13px; color:rgba(255,255,255,.2); }
+
+/* ═══════════════════════════════════════
+   HOME PAGE
+═══════════════════════════════════════ */
+
+/* Hero */
+.hero {
+  min-height:calc(100vh - 68px);
+  background:var(--dark);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+  padding:60px 32px 100px;
+}
+
+/* Subtle grid */
+.hero-grid {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:60px 60px;
+}
+
+/* Glow blobs */
+.blob {
+  position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none;
+  animation:blobFloat 8s ease-in-out infinite alternate;
+}
+.blob-1 { width:480px; height:480px; background:rgba(255,45,111,.12); top:-100px; right:-80px; }
+.blob-2 { width:360px; height:360px; background:rgba(53,87,255,.1);   bottom:-60px; left:-60px; animation-delay:3s; }
+.blob-3 { width:260px; height:260px; background:rgba(77,201,240,.08); top:40%;  right:20%; animation-delay:1.5s; }
+@keyframes blobFloat { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(20px,30px) scale(1.06)} }
+
+/* Floating particles */
+#particles { position:absolute; inset:0; pointer-events:none; }
+.particle {
+  position:absolute; border-radius:50%;
+  animation:particleDrift linear infinite;
+}
+@keyframes particleDrift {
+  0%  { transform:translateY(0) rotate(0); opacity:.7; }
+  100%{ transform:translateY(-110vh) rotate(360deg); opacity:0; }
+}
+
+.hero-inner {
+  position:relative; z-index:2;
+  text-align:center; max-width:820px;
+}
+
+.hero-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(255,45,111,.1); border:1px solid rgba(255,45,111,.3);
+  border-radius:99px; padding:7px 18px; margin-bottom:40px;
+  font-family:'Syne',sans-serif; font-size:12px; font-weight:700;
+  color:var(--pink); letter-spacing:.08em; text-transform:uppercase;
+}
+.hero-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--pink); animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+
+.hero h1 {
+  font-size: clamp(36px, 6vw, 76px);
+  line-height: 1.0;
+  color: white;
+  margin-bottom: 0;
+  letter-spacing: -0.02em;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero h1 .sky-word { color: var(--sky); -webkit-text-fill-color: var(--sky); }
+
+.hero-sub {
+  font-size:18px; color:rgba(255,255,255,.45); max-width:520px;
+  margin:28px auto 48px; line-height:1.75; font-weight:500;
+}
+
+.hero-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+/* Stats row */
+.hero-stats {
+  display:flex; justify-content:center; gap:0;
+  border:1px solid rgba(255,255,255,.08); border-radius:20px;
+  background:rgba(255,255,255,.03); backdrop-filter:blur(10px);
+  max-width:760px; margin:64px auto 0; overflow:hidden;
+}
+.hs-item {
+  flex:1; padding:28px 32px; text-align:center;
+  border-right:1px solid rgba(255,255,255,.07);
+}
+.hs-item:last-child { border-right:none; }
+.hs-num {
+  font-family:'Syne',sans-serif; font-size:26px; font-weight:800;
+  display:block; margin-bottom:6px;
+}
+.hs-num.p { color:var(--pink); }
+.hs-num.s { color:var(--sky); }
+.hs-num.y { color:var(--yellow); }
+.hs-num.m { color:var(--mint); }
+.hs-lbl { font-size:12px; color:rgba(255,255,255,.3); font-weight:600; letter-spacing:.02em; }
+
+/* Sky band */
+.sky-band {
+  background:var(--sky);
+  overflow:hidden; position:relative;
+  padding:20px 0 0;
+}
+.cloud-row {
+  display:flex; gap:140px; padding:0 80px;
+  animation:cloudDrift 30s linear infinite; width:max-content;
+}
+@keyframes cloudDrift { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.cloud {
+  width:90px; height:40px; position:relative; flex-shrink:0;
+}
+.cloud::before, .cloud::after {
+  content:''; position:absolute; background:white; border-radius:50%;
+}
+.cloud::before { width:70px; height:30px; bottom:0; left:10px; }
+.cloud::after  { width:40px; height:40px; bottom:12px; left:22px; }
+.grass { height:24px; background:#5cb85c; border-top:4px solid #388e3c; margin-top:8px; }
+.ground { height:16px; background:#c8a96e; border-top:3px solid #8b6914; }
+
+/* Why section */
+.why-section { padding:100px 52px; background:white; }
+.why-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:32px;
+  max-width:1040px; margin:0 auto;
+}
+.why-card { padding:40px 36px; }
+.why-num {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:48px;
+  line-height:1; margin-bottom:16px;
+}
+.wn-pink { color:var(--pink); }
+.wn-blue { color:var(--blue); }
+.wn-mint { color:var(--mint); }
+.why-title { font-family:'Syne',sans-serif; font-weight:700; font-size:20px; margin-bottom:10px; color:var(--txt); }
+.why-desc { font-size:15px; color:var(--txt2); line-height:1.75; }
+
+/* Logos / clients strip */
+.clients-strip {
+  background:var(--off); border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  padding:40px 52px; text-align:center;
+}
+.clients-label { font-size:12px; font-weight:700; color:var(--txt3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:24px; }
+.clients-row { display:flex; align-items:center; justify-content:center; gap:48px; flex-wrap:wrap; }
+.client-name {
+  font-family:'Syne',sans-serif; font-weight:700; font-size:18px;
+  color:rgba(0,0,0,.2); letter-spacing:.05em;
+  transition:color .2s;
+}
+.client-name:hover { color:rgba(0,0,0,.45); }
+
+/* ═══════════════════════════════════════
+   SERVICES PAGE
+═══════════════════════════════════════ */
+.page-hero {
+  background:var(--dark);
+  padding:88px 52px 100px;
+  position:relative; overflow:hidden;
+  text-align:center;
+}
+.page-hero::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:52px 52px;
+}
+.page-hero > * { position:relative; z-index:1; }
+.page-hero h1 { color:white; margin-bottom:14px; }
+.page-hero .sec-sub { margin:0 auto; }
+
+/* Services body */
+.svc-body { padding:80px 52px; max-width:1120px; margin:0 auto; }
+
+.svc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:80px; }
+
+.svc-card {
+  padding:40px 36px 36px; border-radius:20px;
+  border:1px solid var(--border);
+  background:white;
+  box-shadow:0 2px 20px rgba(0,0,0,.05);
+  position:relative; overflow:hidden;
+  transition:transform .2s, box-shadow .2s;
+}
+.svc-card:hover { transform:translateY(-5px); box-shadow:0 16px 48px rgba(0,0,0,.1); }
+
+.svc-accent {
+  position:absolute; top:0; left:0; right:0; height:3px;
+}
+.acc-pink { background:linear-gradient(90deg,var(--pink),var(--orange)); }
+.acc-blue { background:linear-gradient(90deg,var(--blue),var(--sky)); }
+.acc-mint { background:linear-gradient(90deg,var(--mint),var(--blue)); }
+
+.svc-pill {
+  position:absolute; top:20px; right:20px;
+  background:var(--yellow); color:#6b5000;
+  font-family:'Syne',sans-serif; font-size:10px; font-weight:700;
+  padding:4px 12px; border-radius:99px; letter-spacing:.06em;
+}
+
+.svc-icon {
+  width:52px; height:52px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; margin-bottom:20px;
+}
+.si-pink { background:rgba(255,45,111,.08); }
+.si-blue { background:rgba(53,87,255,.08); }
+.si-mint { background:rgba(0,196,140,.08); }
+
+.svc-name { font-family:'Syne',sans-serif; font-weight:800; font-size:17px; color:var(--txt); margin-bottom:10px; }
+.svc-desc { font-size:14px; color:var(--txt2); line-height:1.72; margin-bottom:22px; }
+
+.svc-list { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:28px; }
+.svc-list li { font-size:14px; color:var(--txt2); display:flex; align-items:flex-start; gap:9px; }
+.svc-list li .dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:7px; }
+.dp { background:var(--pink); }
+.db { background:var(--blue); }
+.dm { background:var(--mint); }
+
+.svc-price {
+  border-top:1px solid rgba(0,0,0,.07); padding-top:20px;
+  display:flex; align-items:baseline; gap:5px; margin-bottom:16px;
+}
+.sp-from { font-size:12px; color:var(--txt3); font-weight:700; }
+.sp-num  { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--txt); }
+.sp-per  { font-size:12px; color:var(--txt3); }
+
+.svc-btn {
+  display:block; text-align:center; padding:13px;
+  border-radius:10px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700;
+  cursor:pointer; transition:opacity .2s, transform .15s; color:white;
+}
+.svc-btn:hover { opacity:.88; transform:translateY(-1px); }
+.sb-pink { background:var(--pink); box-shadow:0 4px 12px rgba(255,45,111,.28); }
+.sb-blue { background:var(--blue); box-shadow:0 4px 12px rgba(53,87,255,.28); }
+.sb-mint { background:var(--mint); box-shadow:0 4px 12px rgba(0,196,140,.28); }
+
+/* Compare table */
+.compare-wrap { margin-bottom:80px; }
+.compare-table {
+  background:white; border-radius:20px;
+  border:1px solid var(--border); overflow:hidden;
+  box-shadow:0 2px 20px rgba(0,0,0,.05);
+}
+.ct-head {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  background:var(--dark); padding:22px 32px; gap:16px;
+}
+.ct-head span {
+  font-family:'Syne',sans-serif; font-size:11px; font-weight:700;
+  letter-spacing:.08em; color:rgba(255,255,255,.35); text-transform:uppercase; text-align:center;
+}
+.ct-head span:first-child { text-align:left; }
+.ct-head .cp { color:var(--pink); }
+.ct-head .cb { color:var(--sky); }
+.ct-head .cm { color:var(--mint); }
+.ct-row {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  padding:16px 32px; border-bottom:1px solid rgba(0,0,0,.05); gap:16px; align-items:center;
+}
+.ct-row:last-child { border-bottom:none; }
+.ct-row:hover { background:rgba(0,0,0,.015); }
+.ct-feat { font-size:14px; font-weight:600; color:var(--txt); }
+.ct-cell { text-align:center; font-size:15px; }
+
+/* FAQ */
+.faq-section { padding:80px 52px; background:var(--off); border-top:1px solid var(--border); }
+.faq-list { max-width:720px; margin:0 auto; display:flex; flex-direction:column; gap:8px; }
+.faq-item {
+  background:white; border:1px solid var(--border);
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 1px 8px rgba(0,0,0,.04);
+}
+.faq-q {
+  padding:20px 24px; display:flex; justify-content:space-between; align-items:center;
+  cursor:pointer; font-weight:700; font-size:15px; color:var(--txt);
+  gap:16px; transition:background .2s;
+}
+.faq-q:hover { background:rgba(0,0,0,.02); }
+.faq-toggle {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:18px;
+  color:var(--pink); flex-shrink:0; width:24px; text-align:center;
+  transition:transform .25s;
+}
+.faq-a {
+  display:none; padding:16px 24px 22px;
+  font-size:15px; color:var(--txt2); line-height:1.75;
+  border-top:1px solid rgba(0,0,0,.05);
+}
+.faq-item.open .faq-a { display:block; }
+.faq-item.open .faq-toggle { transform:rotate(45deg); }
+.faq-item.open .faq-q { background:rgba(255,45,111,.025); }
+
+/* ═══════════════════════════════════════
+   ABOUT PAGE
+═══════════════════════════════════════ */
+.about-body { padding:80px 52px; max-width:1020px; margin:0 auto; }
+
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:48px; }
+
+.about-card { padding:40px; }
+
+.ava {
+  width:60px; height:60px; border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px; margin-bottom:20px;
+}
+.ava-s { background:rgba(255,45,111,.08); }
+.ava-v { background:rgba(53,87,255,.08); }
+
+.abt-name { font-family:'Syne',sans-serif; font-size:14px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
+.abt-role { font-size:14px; font-weight:700; margin-bottom:16px; }
+.role-p { color:var(--pink); }
+.role-b { color:var(--blue); }
+.abt-bio { font-size:15px; color:var(--txt2); line-height:1.8; }
+
+.abt-chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:20px; }
+.chip {
+  font-size:12px; font-weight:700;
+  padding:5px 13px; border-radius:99px;
+  background:var(--off); border:1px solid var(--border); color:var(--txt2);
+}
+
+/* Redbull block */
+.rb-block {
+  background:var(--dark); border-radius:24px;
+  padding:60px; text-align:center; position:relative; overflow:hidden;
+}
+.rb-block::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 70% 80% at 50% 110%, rgba(245,200,0,.1), transparent);
+}
+.rb-block > * { position:relative; z-index:1; }
+.rb-block h2 { color:white; font-size:clamp(22px,3vw,36px); margin-bottom:14px; }
+.rb-block p { color:rgba(255,255,255,.45); font-size:16px; max-width:560px; margin:0 auto 32px; line-height:1.75; }
+.rb-chips { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.rb-chip {
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  border-radius:10px; padding:9px 16px;
+  font-family:'Syne',sans-serif; font-size:11px; font-weight:700;
+  color:white; letter-spacing:.06em;
+}
+
+/* ═══════════════════════════════════════
+   PORTFOLIO PAGE
+═══════════════════════════════════════ */
+.port-body { padding:80px 52px; max-width:1100px; margin:0 auto; }
+
+.port-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:40px; }
+
+.port-card { border-radius:18px; overflow:hidden; }
+.port-card .card { border-radius:18px; }
+
+.port-thumb {
+  height:200px; display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.pt-1 { background:linear-gradient(135deg,#ffe5ed,#ffc4d4); }
+.pt-2 { background:linear-gradient(135deg,#dde6ff,#b8caff); }
+.pt-3 { background:linear-gradient(135deg,#d2f8ee,#9becd4); }
+
+.play-btn {
+  width:56px; height:56px; background:white; border-radius:50%;
+  border:1.5px solid rgba(0,0,0,.1); display:flex; align-items:center; justify-content:center;
+  font-size:18px; cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,.1); transition:transform .15s, box-shadow .15s;
+}
+.play-btn:hover { transform:scale(1.08); box-shadow:0 8px 24px rgba(0,0,0,.14); }
+
+.port-info { padding:22px 24px; }
+.port-name { font-family:'Syne',sans-serif; font-weight:800; font-size:16px; margin-bottom:6px; color:var(--txt); }
+.port-desc { font-size:13px; color:var(--txt2); line-height:1.65; }
+
+.port-soon {
+  background:white; border:2px dashed rgba(0,0,0,.1);
+  border-radius:18px; padding:60px 48px; text-align:center;
+}
+.port-soon p { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:var(--txt3); line-height:2; letter-spacing:.03em; }
+
+/* ═══════════════════════════════════════
+   CONTACT PAGE
+═══════════════════════════════════════ */
+.contact-body { padding:72px 52px; max-width:880px; margin:0 auto; }
+
+.contact-grid { display:grid; grid-template-columns:1.45fr 1fr; gap:28px; align-items:start; }
+
+.form-card { padding:40px; }
+
+.form-card h3 {
+  font-family:'Syne',sans-serif; font-size:14px; font-weight:800;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--txt);
+  margin-bottom:28px;
+}
+
+.fg { margin-bottom:16px; }
+.fg label {
+  display:block; font-family:'Syne',sans-serif; font-size:10px;
+  font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--txt3); margin-bottom:7px;
+}
+.fg input, .fg select, .fg textarea {
+  width:100%; background:var(--off); border:1.5px solid rgba(0,0,0,.09);
+  border-radius:10px; padding:13px 15px; color:var(--txt);
+  font-family:'Cabinet Grotesk',sans-serif; font-size:15px;
+  outline:none; transition:border-color .2s, box-shadow .2s;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus {
+  border-color:var(--pink); box-shadow:0 0 0 3px rgba(255,45,111,.09);
+}
+.fg textarea { resize:vertical; min-height:105px; }
+.fg select { cursor:pointer; }
+.fg-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+.form-submit {
+  width:100%; background:var(--pink); color:white;
+  padding:15px; border-radius:11px;
+  font-family:'Syne',sans-serif; font-size:14px; font-weight:700;
+  box-shadow:0 4px 14px rgba(255,45,111,.3); margin-top:4px;
+  transition:opacity .2s, transform .15s;
+}
+.form-submit:hover { opacity:.9; transform:translateY(-1px); }
+
+/* Contact sidebar */
+.contact-sidebar { display:flex; flex-direction:column; gap:14px; }
+
+.freebie-box {
+  background:var(--yellow); border-radius:18px;
+  border:1px solid rgba(0,0,0,.07); padding:28px 24px;
+}
+.freebie-box .tag { margin-bottom:12px; }
+.fb-title { font-family:'Syne',sans-serif; font-size:16px; font-weight:800; color:var(--dark); margin-bottom:9px; line-height:1.4; }
+.fb-desc { font-size:13px; color:rgba(0,0,0,.55); line-height:1.65; margin-bottom:18px; }
+
+.co-link {
+  background:white; border-radius:14px; border:1px solid var(--border);
+  padding:20px 22px; display:flex; align-items:center; gap:14px;
+  text-decoration:none; box-shadow:0 1px 12px rgba(0,0,0,.04);
+  transition:transform .15s, box-shadow .15s;
+}
+.co-link:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.09); }
+.co-ico {
+  width:42px; height:42px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px; flex-shrink:0;
+}
+.ci-b { background:rgba(53,87,255,.08); }
+.ci-p { background:rgba(255,45,111,.08); }
+.ci-m { background:rgba(0,196,140,.08); }
+.co-lbl { font-family:'Syne',sans-serif; font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--txt); margin-bottom:2px; }
+.co-sub { font-size:12px; color:var(--txt3); }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:900px){
+  nav { padding:0 20px; }
+  .nav-links { display:none; }
+  .svc-grid, .about-grid, .why-grid, .port-grid { grid-template-columns:1fr; }
+  .contact-grid { grid-template-columns:1fr; }
+  .hero-stats { flex-direction:column; }
+  .hs-item { border-right:none; border-bottom:1px solid rgba(255,255,255,.07); }
+  .svc-body, .about-body, .port-body, .contact-body, .faq-section { padding:50px 20px; }
+  .page-hero, .cta-strip { padding:60px 20px; }
+  footer { padding:28px 20px; flex-direction:column; text-align:center; }
+  .ct-head, .ct-row { grid-template-columns:1.5fr 1fr 1fr 1fr; }
+  .rb-block { padding:40px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav>
+  <div class="nav-logo" onclick="go('home')">
+    <!-- Abstract geometric logo: interlocking A shape with gradient -->
+    <div class="logo-mark">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lg1" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ff2d6f"/>
+            <stop offset="100%" stop-color="#ff6230"/>
+          </linearGradient>
+          <linearGradient id="lg2" x1="36" y1="0" x2="0" y2="36" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#3557ff"/>
+            <stop offset="100%" stop-color="#4dc9f0"/>
+          </linearGradient>
+        </defs>
+        <!-- Left diamond half -->
+        <path d="M18 2 L4 18 L18 28 Z" fill="url(#lg1)" opacity="0.95"/>
+        <!-- Right diamond half -->
+        <path d="M18 2 L32 18 L18 28 Z" fill="url(#lg2)" opacity="0.95"/>
+        <!-- Center accent -->
+        <path d="M18 28 L10 22 L18 34 L26 22 Z" fill="#f5c800" opacity="0.9"/>
+        <!-- Inner highlight -->
+        <path d="M18 8 L11 18 L18 24 L25 18 Z" fill="white" opacity="0.08"/>
+      </svg>
+    </div>
+    <span class="nav-name"><span class="a1">A</span>RC<span class="a1">A</span>DE</span>
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="#" onclick="go('home')"      id="nl-home"      class="active">Home</a></li>
+    <li><a href="#" onclick="go('services')"  id="nl-services">Services</a></li>
+    <li><a href="#" onclick="go('about')"     id="nl-about">About</a></li>
+    <li><a href="#" onclick="go('portfolio')" id="nl-portfolio">Work</a></li>
+    <li><a href="#" onclick="go('contact')"   id="nl-contact" class="nav-cta">Book a Call</a></li>
+  </ul>
+</nav>
+
+<!-- ════════════════════════════════════
+     HOME
+════════════════════════════════════ -->
+<div id="pg-home" class="page active page-wrap">
+
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div id="particles"></div>
+
+    <div class="hero-inner">
+      <div class="hero-badge">B2B Content Agency</div>
+
+      <h1>
+        B2B Doesn't<br>
+        Have To Mean<br>
+        <em>Boring To Boring.</em>
+      </h1>
+
+      <p class="hero-sub">
+        We make short-form video content and manage LinkedIn profiles for B2B brands that are done blending into the feed.
+      </p>
+
+      <div class="hero-btns">
+        <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
+        <a href="#" class="btn btn-ghost btn-lg" onclick="go('services')">See What We Do</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hs-item">
+          <span class="hs-num p">11M</span>
+          <span class="hs-lbl">Organic Views</span>
+        </div>
+        <div class="hs-item">
+          <span class="hs-num s">20K</span>
+          <span class="hs-lbl">Impressions, 1 Video</span>
+        </div>
+        <div class="hs-item">
+          <span class="hs-num y">1,000+</span>
+          <span class="hs-lbl">Sales from Content</span>
+        </div>
+        <div class="hs-item">
+          <span class="hs-num m">1st</span>
+          <span class="hs-lbl">RedBull National</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sky / Mario transition -->
+  <div class="sky-band">
+    <div class="cloud-row">
+      <div class="cloud"></div><div class="cloud"></div><div class="cloud"></div>
+      <div class="cloud"></div><div class="cloud"></div><div class="cloud"></div>
+    </div>
+    <div class="grass"></div>
+    <div class="ground"></div>
+  </div>
+
+  <!-- Clients -->
+  <div class="clients-strip">
+    <div class="clients-label">Brands We Have Worked With</div>
+    <div class="clients-row">
+      <span class="client-name">UPVERT</span>
+      <span class="client-name">ICEWEB</span>
+      <span class="client-name">REDBULL</span>
+    </div>
+  </div>
+
+  <!-- Why -->
+  <section class="why-section">
+    <div class="sec-head center fade">
+      <div class="tag tag-pink">WHY ARCADE</div>
+      <h2 class="sec-title">Content That Actually<br>Does Something</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card card fade">
+        <div class="why-num wn-pink">01</div>
+        <div class="why-title">We Know What Stops the Scroll</div>
+        <p class="why-desc">Between 11 million organic views and a viral SDR-to-inbound story, we have figured out what makes people stop, watch, and care. We bring that to your brand.</p>
+      </div>
+      <div class="why-card card fade" style="transition-delay:.1s">
+        <div class="why-num wn-blue">02</div>
+        <div class="why-title">Sales Psychology Baked In</div>
+        <p class="why-desc">Vojdan spent years as an SDR. He knows what B2B buyers actually respond to. Every piece of content we make is built to move people, not just get views.</p>
+      </div>
+      <div class="why-card card fade" style="transition-delay:.2s">
+        <div class="why-num wn-mint">03</div>
+        <div class="why-title">End-to-End, No Middleman</div>
+        <p class="why-desc">Strategy, scripting, filming guidance, editing, posting. We handle all of it. You stay focused on your business while your LinkedIn grows without you lifting a finger.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA strip -->
+  <div class="cta-strip">
+    <h2>Ready to Stop Blending In?</h2>
+    <p>Book a free content audit and we will tell you exactly what is holding your LinkedIn back.</p>
+    <div class="btns">
+      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get Your Free Audit &rarr;</a>
+      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="foot-logo"><span class="a1">A</span>RCADE</div>
+    <div class="foot-copy">&copy; 2025 Arcade. B2B content that actually works.</div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════
+     SERVICES
+════════════════════════════════════ -->
+<div id="pg-services" class="page page-wrap">
+
+  <div class="page-hero">
+    <div class="tag tag-white">SERVICES</div>
+    <h1 class="sec-title light">Pick Your Package</h1>
+    <p class="sec-sub light">Three ways to make your brand impossible to scroll past on LinkedIn.</p>
+  </div>
+
+  <div class="svc-body">
+    <div class="svc-grid">
+
+      <div class="svc-card fade">
+        <div class="svc-accent acc-pink"></div>
+        <div class="svc-icon si-pink">🎬</div>
+        <div class="svc-name">Video Packages</div>
+        <p class="svc-desc">High-quality short-form videos delivered to you, ready to post, boost, embed, or send wherever you need them.</p>
+        <ul class="svc-list">
+          <li><span class="dot dp"></span>3 to 5 videos per package</li>
+          <li><span class="dot dp"></span>LinkedIn organic, ads, email snippets</li>
+          <li><span class="dot dp"></span>Website popups and in-product tutorials</li>
+          <li><span class="dot dp"></span>Professional editing included</li>
+          <li><span class="dot dp"></span>Bulk discount available</li>
+        </ul>
+        <div class="svc-price">
+          <span class="sp-from">from</span>
+          <span class="sp-num">$500</span>
+          <span class="sp-per">/ video</span>
+        </div>
+        <a href="#" class="svc-btn sb-pink" onclick="go('contact')">Get Videos &rarr;</a>
+      </div>
+
+      <div class="svc-card fade" style="transition-delay:.1s">
+        <div class="svc-accent acc-blue"></div>
+        <div class="svc-pill">POPULAR</div>
+        <div class="svc-icon si-blue">📱</div>
+        <div class="svc-name">Profile Management</div>
+        <p class="svc-desc">We run your company LinkedIn from strategy to posting. Consistent content that grows your audience every single week.</p>
+        <ul class="svc-list">
+          <li><span class="dot db"></span>3 to 4 posts per week (text, carousels, memes)</li>
+          <li><span class="dot db"></span>2 short-form videos per month</li>
+          <li><span class="dot db"></span>Full content strategy included</li>
+          <li><span class="dot db"></span>Growth-focused approach</li>
+          <li><span class="dot db"></span>Monthly performance report</li>
+        </ul>
+        <div class="svc-price">
+          <span class="sp-from">from</span>
+          <span class="sp-num">$1,500</span>
+          <span class="sp-per">/ month</span>
+        </div>
+        <a href="#" class="svc-btn sb-blue" onclick="go('contact')">Get Started &rarr;</a>
+      </div>
+
+      <div class="svc-card fade" style="transition-delay:.2s">
+        <div class="svc-accent acc-mint"></div>
+        <div class="svc-icon si-mint">🚀</div>
+        <div class="svc-name">Full Team Presence</div>
+        <p class="svc-desc">Company profile management plus up to 5 employee personal profiles, turning your whole team into a content engine.</p>
+        <ul class="svc-list">
+          <li><span class="dot dm"></span>Everything in Profile Management</li>
+          <li><span class="dot dm"></span>Up to 5 personal employee profiles</li>
+          <li><span class="dot dm"></span>Personal brand strategy per person</li>
+          <li><span class="dot dm"></span>$200 per additional profile</li>
+          <li><span class="dot dm"></span>Unified brand voice across all profiles</li>
+        </ul>
+        <div class="svc-price">
+          <span class="sp-from">from</span>
+          <span class="sp-num">$2,500</span>
+          <span class="sp-per">/ month</span>
+        </div>
+        <a href="#" class="svc-btn sb-mint" onclick="go('contact')">Go Full Team &rarr;</a>
+      </div>
+
+    </div>
+
+    <!-- Compare -->
+    <div class="compare-wrap">
+      <div class="sec-head center fade"><div class="tag tag-blue">COMPARE</div><h2 class="sec-title">What Is Included</h2></div>
+      <div class="compare-table fade">
+        <div class="ct-head">
+          <span>Feature</span>
+          <span class="cp">Video Pkg</span>
+          <span class="cb">Profile Mgmt</span>
+          <span class="cm">Full Team</span>
+        </div>
+        <div class="ct-row"><span class="ct-feat">Short-form video production</span><span class="ct-cell">✅</span><span class="ct-cell">✅</span><span class="ct-cell">✅</span></div>
+        <div class="ct-row"><span class="ct-feat">Content strategy</span><span class="ct-cell">❌</span><span class="ct-cell">✅</span><span class="ct-cell">✅</span></div>
+        <div class="ct-row"><span class="ct-feat">Weekly posting (text, carousels, memes)</span><span class="ct-cell">❌</span><span class="ct-cell">✅</span><span class="ct-cell">✅</span></div>
+        <div class="ct-row"><span class="ct-feat">Monthly performance report</span><span class="ct-cell">❌</span><span class="ct-cell">✅</span><span class="ct-cell">✅</span></div>
+        <div class="ct-row"><span class="ct-feat">Employee personal profiles</span><span class="ct-cell">❌</span><span class="ct-cell">❌</span><span class="ct-cell">✅</span></div>
+        <div class="ct-row"><span class="ct-feat">Personal brand strategy per person</span><span class="ct-cell">❌</span><span class="ct-cell">❌</span><span class="ct-cell">✅</span></div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="sec-head center fade"><div class="tag tag-pink">FAQ</div><h2 class="sec-title">Common Questions</h2></div>
+    <div class="faq-list" style="max-width:720px;margin:0 auto 0;">
+      <div class="faq-item">
+        <div class="faq-q" onclick="faq(this)">Do I need to be on camera?<span class="faq-toggle">+</span></div>
+        <div class="faq-a">Not necessarily. We can work with screen recordings, B-roll footage, voiceovers, or motion graphics. That said, on-camera content tends to perform best for personal brand and LinkedIn organic content if you are open to it.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="faq(this)">How long until I get the first videos?<span class="faq-toggle">+</span></div>
+        <div class="faq-a">For video packages, turnaround is typically 7 to 10 business days after we align on the brief and you send the raw material. For management packages, we spend the first week on strategy and planning before anything goes live.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="faq(this)">What if I have no footage yet?<span class="faq-toggle">+</span></div>
+        <div class="faq-a">No problem. We will walk you through exactly what we need. It can be as simple as a phone recording or a Zoom call. We handle the rest, including helping you find the story worth telling.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="faq(this)">Can the videos be used for paid ads too?<span class="faq-toggle">+</span></div>
+        <div class="faq-a">Absolutely. We design videos that work as high-quality ad creatives, not generic stock-footage ads. Whether it is LinkedIn ads, website popups, or email campaigns, we build each video for its intended purpose.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="faq(this)">Is there a minimum commitment for management?<span class="faq-toggle">+</span></div>
+        <div class="faq-a">We ask for a minimum of 3 months. Good content compounds over time. The first month is strategy and foundation, and results build from there.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="faq(this)">Do you only work on LinkedIn?<span class="faq-toggle">+</span></div>
+        <div class="faq-a">LinkedIn B2B content is our sweet spot, but the videos we create can be used anywhere including websites, email, Instagram, and YouTube Shorts. Tell us your use case and we will let you know how we can help.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA strip -->
+  <div class="cta-strip" style="margin-top:80px">
+    <h2>Not Sure Which Package Fits?</h2>
+    <p>Start with a free audit and we will tell you exactly what your brand needs.</p>
+    <div class="btns">
+      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
+      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="foot-logo"><span class="a1">A</span>RCADE</div>
+    <div class="foot-copy">&copy; 2025 Arcade. B2B content that actually works.</div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════
+     ABOUT
+════════════════════════════════════ -->
+<div id="pg-about" class="page page-wrap">
+
+  <div class="page-hero">
+    <div class="tag tag-white">ABOUT US</div>
+    <h1 class="sec-title light">Meet the Players</h1>
+    <p class="sec-sub light">A content duo combining viral instinct with sales psychology.</p>
+  </div>
+
+  <div class="about-body">
+    <div class="about-grid">
+
+      <div class="about-card card fade">
+        <div class="ava ava-s">🎬</div>
+        <div class="abt-name">Sofija</div>
+        <div class="abt-role role-p">Video and Content Specialist</div>
+        <p class="abt-bio">It started with crochet plushies. One video hit 11 million views in my first month and sold over 1,000 patterns from a hobby account. That is when I got obsessed with what makes content actually stop people.<br><br>Since then I have made videos for a startup called Upvert that still run on their website and email campaigns, and I now run the full LinkedIn content operation for IceWeb as their content specialist contractor. I also edit everything. No outsourcing, no shortcuts.</p>
+        <div class="abt-chips">
+          <span class="chip">11M Views</span>
+          <span class="chip">1K+ Sales</span>
+          <span class="chip">IceWeb</span>
+          <span class="chip">Video Editor</span>
+        </div>
+      </div>
+
+      <div class="about-card card fade" style="transition-delay:.12s">
+        <div class="ava ava-v">📊</div>
+        <div class="abt-name">Vojdan</div>
+        <div class="abt-role role-b">LinkedIn Strategy and Sales Content</div>
+        <p class="abt-bio">Years as an SDR taught me one thing: cold outreach is a grind, and most of it gets ignored. So I stopped cold calling and started posting. One video hit 20,000 impressions and brought inbound leads straight to my inbox. No cold outreach. They came to me.<br><br>I understand what B2B buyers actually respond to because I was the one trying to reach them. Now I build content that does the selling before you ever send a message. I am also deep in the AI space and currently building my own AI content tool.</p>
+        <div class="abt-chips">
+          <span class="chip">20K Impressions</span>
+          <span class="chip">SDR Background</span>
+          <span class="chip">AI Builder</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="rb-block fade">
+      <div class="tag tag-yellow">The RedBull Story</div>
+      <h2>We Made a 60-Second Video.<br>It Beat Every Team in the Country.</h2>
+      <p>RedBull ran a national competition for teams of 2. Apply with a video, one team per country wins a trip to Ibiza. We made a 60-second video showing our personalities and won. Two weeks later we were in Ibiza. That is what the right content does. It gets you in the room.</p>
+      <div class="rb-chips">
+        <div class="rb-chip">🏆 National Winners</div>
+        <div class="rb-chip">✈️ Ibiza</div>
+        <div class="rb-chip">60-Second Video</div>
+        <div class="rb-chip">⚡ RedBull Competition</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-strip">
+    <h2>Want Results Like These for Your Brand?</h2>
+    <p>Let us show you what we can do. Start with a free LinkedIn content audit.</p>
+    <div class="btns">
+      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
+      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="foot-logo"><span class="a1">A</span>RCADE</div>
+    <div class="foot-copy">&copy; 2025 Arcade. B2B content that actually works.</div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════
+     PORTFOLIO
+════════════════════════════════════ -->
+<div id="pg-portfolio" class="page page-wrap">
+
+  <div class="page-hero">
+    <div class="tag tag-white">OUR WORK</div>
+    <h1 class="sec-title light">The Highlight Reel</h1>
+    <p class="sec-sub light">A growing collection of content we have made for brands and ourselves.</p>
+  </div>
+
+  <div class="port-body">
+    <div class="port-grid">
+
+      <div class="port-card card fade">
+        <div class="port-thumb pt-1"><div class="play-btn">▶</div></div>
+        <div class="port-info">
+          <div class="tag tag-pink" style="margin-bottom:10px">Website Popup</div>
+          <div class="port-name">Upvert Brand Video</div>
+          <p class="port-desc">Short-form brand video used across website popups and email campaigns for a B2B startup.</p>
+        </div>
+      </div>
+
+      <div class="port-card card fade" style="transition-delay:.1s">
+        <div class="port-thumb pt-2"><div class="play-btn">▶</div></div>
+        <div class="port-info">
+          <div class="tag tag-blue" style="margin-bottom:10px">LinkedIn Organic</div>
+          <div class="port-name">IceWeb LinkedIn Content</div>
+          <p class="port-desc">Ongoing company LinkedIn management. 2 videos per month and 4 posts per week.</p>
+        </div>
+      </div>
+
+      <div class="port-card card fade" style="transition-delay:.2s">
+        <div class="port-thumb pt-3"><div class="play-btn">▶</div></div>
+        <div class="port-info">
+          <div class="tag tag-mint" style="margin-bottom:10px">Personal Brand</div>
+          <div class="port-name">Vojdan Inbound Lead Video</div>
+          <p class="port-desc">One video. 20K impressions. Inbound leads with zero cold outreach.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="port-soon fade">
+      <p>MORE WORK COMING SOON<br><br>We are just getting started. Check back soon, or better yet, be in the next reel.</p>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-strip" style="margin-top:80px">
+    <h2>Want to Be in the Next Reel?</h2>
+    <p>Start with a free audit and let us figure out your content story together.</p>
+    <div class="btns">
+      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
+      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="foot-logo"><span class="a1">A</span>RCADE</div>
+    <div class="foot-copy">&copy; 2025 Arcade. B2B content that actually works.</div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════
+     CONTACT
+════════════════════════════════════ -->
+<div id="pg-contact" class="page page-wrap">
+
+  <div class="page-hero">
+    <div class="tag tag-white">CONTACT</div>
+    <h1 class="sec-title light">Let's Talk.</h1>
+    <p class="sec-sub light">Book a call, claim your free audit, or just send us a message. We respond fast.</p>
+  </div>
+
+  <div class="contact-body">
+    <div class="contact-grid">
+
+      <div class="form-card card fade">
+        <h3>Send a Message</h3>
+        <div class="fg-row fg">
+          <div>
+            <label>Your Name</label>
+            <input type="text" placeholder="Jane Smith">
+          </div>
+          <div>
+            <label>Company</label>
+            <input type="text" placeholder="Acme Inc.">
+          </div>
+        </div>
+        <div class="fg">
+          <label>Email</label>
+          <input type="email" placeholder="jane@company.com">
+        </div>
+        <div class="fg">
+          <label>I am Interested In</label>
+          <select>
+            <option value="">Select a service...</option>
+            <option>Free Content Audit (no commitment)</option>
+            <option>Video Package (from $500 per video)</option>
+            <option>LinkedIn Profile Management (from $1,500/mo)</option>
+            <option>Full Team Presence (from $2,500/mo)</option>
+            <option>Not sure yet, let's talk</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Anything Else?</label>
+          <textarea placeholder="Tell us about your brand, your goals, or what is not working right now..."></textarea>
+        </div>
+        <button class="form-submit" id="fsub">Send Message &rarr;</button>
+      </div>
+
+      <div class="contact-sidebar fade" style="transition-delay:.12s">
+
+        <div class="freebie-box">
+          <div class="tag tag-yellow">Free Offer</div>
+          <div class="fb-title">Free LinkedIn Content Audit</div>
+          <p class="fb-desc">We review your profile and content, then tell you exactly what is working, what is not, and what one change would make the biggest difference.</p>
+          <a href="#" class="btn btn-dark btn-sm">Claim Free Audit &rarr;</a>
+        </div>
+
+        <a href="https://linkedin.com" target="_blank" class="co-link">
+          <div class="co-ico ci-b">💼</div>
+          <div><div class="co-lbl">LinkedIn DM</div><div class="co-sub">Message us directly</div></div>
+        </a>
+
+        <a href="mailto:hello@arcadeagency.com" class="co-link">
+          <div class="co-ico ci-p">✉️</div>
+          <div><div class="co-lbl">Email Us</div><div class="co-sub">hello@arcadeagency.com</div></div>
+        </a>
+
+        <a href="https://calendly.com" target="_blank" class="co-link">
+          <div class="co-ico ci-m">📅</div>
+          <div><div class="co-lbl">Book a Call</div><div class="co-sub">Pick a time that works</div></div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ on contact too -->
+  <div class="faq-section">
+    <div class="sec-head center fade"><div class="tag tag-pink">FAQ</div><h2 class="sec-title">Still Have Questions?</h2></div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="faq(this)">How does the free audit work?<span class="faq-toggle">+</span></div>
+        <div class="faq-a">Select the free audit option in the form above. We review your LinkedIn profile and content, then jump on a short call to walk you through what is working, what is not, and what one change would make the biggest difference. No pitch, no pressure, just real feedback.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="faq(this)">How quickly do you respond?<span class="faq-toggle">+</span></div>
+        <div class="faq-a">We aim to respond within 24 hours on business days. If you need to talk sooner, book a call directly using the Calendly link and find a time that works.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="faq(this)">What happens after the first call?<span class="faq-toggle">+</span></div>
+        <div class="faq-a">We will send you a clear proposal with the package that fits best, a rough content plan, and next steps. No pressure. We would rather take the time to make sure it is the right fit than rush you into something.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="foot-logo"><span class="a1">A</span>RCADE</div>
+    <div class="foot-copy">&copy; 2025 Arcade. B2B content that actually works.</div>
+  </footer>
+</div>
+
+<script>
+// Particles
+const pc = document.getElementById('particles');
+const pcols = ['#ff2d6f','#4dc9f0','#f5c800','#00c48c','#ff6230'];
+for(let i=0;i<30;i++){
+  const p=document.createElement('div');
+  p.className='particle';
+  const sz=Math.random()*3+1.5;
+  p.style.cssText=`width:${sz}px;height:${sz}px;background:${pcols[i%pcols.length]};left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${Math.random()*10+6}s;animation-delay:${Math.random()*8}s;opacity:${Math.random()*.5+.2};`;
+  pc.appendChild(p);
+}
+
+// Page navigation
+function go(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+name).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  const el=document.getElementById('nl-'+name);
+  if(el) el.classList.add('active');
+  setTimeout(()=>{
+    document.querySelectorAll('#pg-'+name+' .fade:not(.in)').forEach(el=>{
+      el.classList.remove('in'); void el.offsetWidth;
+    });
+    observe();
+  },50);
+}
+
+// Intersection observer for fade-in
+function observe(){
+  const ob=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});
+  },{threshold:.08});
+  document.querySelectorAll('.fade:not(.in)').forEach(el=>ob.observe(el));
+}
+observe();
+
+// FAQ
+function faq(el){
+  const item=el.parentElement;
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+
+// Form
+document.getElementById('fsub').addEventListener('click',function(){
+  this.textContent='Message Sent!';
+  this.style.background='#00c48c';
+  setTimeout(()=>{this.textContent='Send Message →';this.style.background='';},3000);
+});
+</script>
+</body>
+</html>
