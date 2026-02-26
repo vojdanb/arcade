@@ -1188,23 +1188,24 @@ footer {
 
       <div class="form-card card fade">
         <h3>Send a Message</h3>
+        <form action="https://formspree.io/f/xwvnyjnr" method="POST">
         <div class="fg-row fg">
           <div>
             <label>Your Name</label>
-            <input type="text" placeholder="Jane Smith">
+            <input type="text" name="name" placeholder="Jane Smith">
           </div>
           <div>
             <label>Company</label>
-            <input type="text" placeholder="Acme Inc.">
+            <input type="text" name="company" placeholder="Acme Inc.">
           </div>
         </div>
         <div class="fg">
           <label>Email</label>
-          <input type="email" placeholder="jane@company.com">
+          <input type="email" name="email" placeholder="jane@company.com">
         </div>
         <div class="fg">
           <label>I am Interested In</label>
-          <select>
+          <select name="service">
             <option value="">Select a service...</option>
             <option>Free Content Audit (no commitment)</option>
             <option>Video Package (from $500 per video)</option>
@@ -1215,9 +1216,10 @@ footer {
         </div>
         <div class="fg">
           <label>Anything Else?</label>
-          <textarea placeholder="Tell us about your brand, your goals, or what is not working right now..."></textarea>
+          <textarea name="message" placeholder="Tell us about your brand, your goals, or what is not working right now..."></textarea>
         </div>
-        <button class="form-submit" id="fsub">Send Message &rarr;</button>
+        <button type="submit" class="form-submit">Send Message &rarr;</button>
+        </form>
       </div>
 
       <div class="contact-sidebar fade" style="transition-delay:.12s">
@@ -1334,12 +1336,6 @@ function faq(el){
   if(!wasOpen)item.classList.add('open');
 }
 
-// Form
-document.getElementById('fsub').addEventListener('click',function(){
-  this.textContent='Message Sent!';
-  this.style.background='#00c48c';
-  setTimeout(()=>{this.textContent='Send Message →';this.style.background='';},3000);
-});
 </script>
 </body>
 </html>
