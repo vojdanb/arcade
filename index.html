@@ -1400,6 +1400,10 @@ function go(name){
   if(el) el.classList.add('active');
   setTimeout(()=>{
     observe();
+    if(name === 'portfolio'){
+      document.querySelectorAll('.iframe-tap-shield').forEach(s=>{ s.style.display=''; });
+      initTapShields();
+    }
   },50);
 }
 
@@ -1474,21 +1478,6 @@ function initTapShields() {
   });
 }
 
-// Re-init shields whenever we navigate to portfolio
-// (shields may have been dismissed previously)
-const _origGo = go;
-function go(name) {
-  _origGo(name);
-  if (name === 'portfolio') {
-    // Reset all shields when returning to portfolio
-    setTimeout(() => {
-      document.querySelectorAll('.iframe-tap-shield').forEach(s => {
-        s.style.display = '';
-      });
-      initTapShields();
-    }, 60);
-  }
-}
 // Run once on load
 initTapShields();
 
