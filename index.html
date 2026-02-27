@@ -743,7 +743,7 @@ footer {
 
 <!-- ════════════════ NAV ════════════════ -->
 <nav>
-  <div class="nav-logo" onclick="go('home')">
+  <div class="nav-logo" onclick="go('home'); return false;">
     <div class="logo-mark">
       <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -766,11 +766,11 @@ footer {
   </div>
 
   <ul class="nav-links">
-    <li><a href="#" onclick="go('home')"      id="nl-home"      class="active">Home</a></li>
-    <li><a href="#" onclick="go('services')"  id="nl-services">Services</a></li>
-    <li><a href="#" onclick="go('about')"     id="nl-about">About</a></li>
-    <li><a href="#" onclick="go('portfolio')" id="nl-portfolio">Work</a></li>
-    <li><a href="#" onclick="go('contact')"   id="nl-contact" class="nav-cta">Book a Call</a></li>
+    <li><a href="javascript:void(0)" onclick="go('home'); return false;"      id="nl-home"      class="active">Home</a></li>
+    <li><a href="javascript:void(0)" onclick="go('services'); return false;"  id="nl-services">Services</a></li>
+    <li><a href="javascript:void(0)" onclick="go('about'); return false;"     id="nl-about">About</a></li>
+    <li><a href="javascript:void(0)" onclick="go('portfolio'); return false;" id="nl-portfolio">Work</a></li>
+    <li><a href="javascript:void(0)" onclick="go('contact'); return false;"   id="nl-contact" class="nav-cta">Book a Call</a></li>
   </ul>
 
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -780,11 +780,11 @@ footer {
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#" onclick="goMobile('home')">Home</a>
-  <a href="#" onclick="goMobile('services')">Services</a>
-  <a href="#" onclick="goMobile('about')">About</a>
-  <a href="#" onclick="goMobile('portfolio')">Work</a>
-  <a href="#" onclick="goMobile('contact')" class="mobile-cta">Book a Call</a>
+  <a href="javascript:void(0)" onclick="goMobile('home'); return false;">Home</a>
+  <a href="javascript:void(0)" onclick="goMobile('services'); return false;">Services</a>
+  <a href="javascript:void(0)" onclick="goMobile('about'); return false;">About</a>
+  <a href="javascript:void(0)" onclick="goMobile('portfolio'); return false;">Work</a>
+  <a href="javascript:void(0)" onclick="goMobile('contact'); return false;" class="mobile-cta">Book a Call</a>
 </div>
 
 <!-- ════════════════════════════════════
@@ -813,8 +813,8 @@ footer {
       </p>
 
       <div class="hero-btns">
-        <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
-        <a href="#" class="btn btn-ghost btn-lg" onclick="go('services')">See What We Do</a>
+        <a href="javascript:void(0)" class="btn btn-pink btn-lg" onclick="go('contact'); return false;">Get a Free Audit &rarr;</a>
+        <a href="javascript:void(0)" class="btn btn-ghost btn-lg" onclick="go('services'); return false;">See What We Do</a>
       </div>
 
       <div class="hero-stats">
@@ -878,8 +878,8 @@ footer {
     <h2>Ready to Stop Blending In?</h2>
     <p>Book a free content audit and we will tell you exactly what is holding your LinkedIn back.</p>
     <div class="btns">
-      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get Your Free Audit &rarr;</a>
-      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+      <a href="javascript:void(0)" class="btn btn-pink btn-lg" onclick="go('contact'); return false;">Get Your Free Audit &rarr;</a>
+      <a href="javascript:void(0)" class="btn btn-ghost btn-lg" onclick="go('contact'); return false;">Book a Call</a>
     </div>
   </div>
 
@@ -920,7 +920,7 @@ footer {
           <span class="sp-num">$500</span>
           <span class="sp-per">/ video</span>
         </div>
-        <a href="#" class="svc-btn sb-pink" onclick="go('contact')">Get Videos &rarr;</a>
+        <a href="javascript:void(0)" class="svc-btn sb-pink" onclick="go('contact'); return false;">Get Videos &rarr;</a>
       </div>
 
       <div class="svc-card fade" style="transition-delay:.1s">
@@ -938,10 +938,10 @@ footer {
         </ul>
         <div class="svc-price">
           <span class="sp-from">from</span>
-          <span class="sp-num">$2,000</span>
+          <span class="sp-num">$1,500</span>
           <span class="sp-per">/ month</span>
         </div>
-        <a href="#" class="svc-btn sb-blue" onclick="go('contact')">Get Started &rarr;</a>
+        <a href="javascript:void(0)" class="svc-btn sb-blue" onclick="go('contact'); return false;">Get Started &rarr;</a>
       </div>
 
       <div class="svc-card fade" style="transition-delay:.2s">
@@ -958,10 +958,10 @@ footer {
         </ul>
         <div class="svc-price">
           <span class="sp-from">from</span>
-          <span class="sp-num">$4,000</span>
+          <span class="sp-num">$2,500</span>
           <span class="sp-per">/ month</span>
         </div>
-        <a href="#" class="svc-btn sb-mint" onclick="go('contact')">Go Full Team &rarr;</a>
+        <a href="javascript:void(0)" class="svc-btn sb-mint" onclick="go('contact'); return false;">Go Full Team &rarr;</a>
       </div>
 
     </div>
@@ -989,27 +989,27 @@ footer {
     <div class="sec-head center fade"><div class="tag tag-pink">FAQ</div><h2 class="sec-title">Common Questions</h2></div>
     <div class="faq-list" style="max-width:720px;margin:0 auto 0;">
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">Do I need to be on camera?<span class="faq-toggle">+</span></div>
+        <div class="faq-q" onclick="faq(this, event)">Do I need to be on camera?<span class="faq-toggle">+</span></div>
         <div class="faq-a">Nope. We will be the faces on screen. That is kind of our thing. That said, if you ever want to show up occasionally, a quick clip, some B-roll, or a voiceover — we will write the script, direct you, and handle all the editing. But it is completely up to you.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">How long until I get the first videos?<span class="faq-toggle">+</span></div>
+        <div class="faq-q" onclick="faq(this, event)">How long until I get the first videos?<span class="faq-toggle">+</span></div>
         <div class="faq-a">For video packages, turnaround is typically 7 to 10 business days after we align on the brief and you send the raw material. For management packages, we spend the first week on strategy and planning before anything goes live.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">What if I have no footage yet?<span class="faq-toggle">+</span></div>
+        <div class="faq-q" onclick="faq(this, event)">What if I have no footage yet?<span class="faq-toggle">+</span></div>
         <div class="faq-a">Honestly, that is a good thing. A clean slate means we build everything from scratch, exactly how it should be. No old habits to undo.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">Can the videos be used for paid ads too?<span class="faq-toggle">+</span></div>
+        <div class="faq-q" onclick="faq(this, event)">Can the videos be used for paid ads too?<span class="faq-toggle">+</span></div>
         <div class="faq-a">Absolutely. We design videos that work as high-quality ad creatives, not generic stock-footage ads. Whether it is LinkedIn ads, website popups, or email campaigns, we build each video for its intended purpose.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">Is there a minimum commitment for management?<span class="faq-toggle">+</span></div>
+        <div class="faq-q" onclick="faq(this, event)">Is there a minimum commitment for management?<span class="faq-toggle">+</span></div>
         <div class="faq-a">We ask for a minimum of 3 months. Good content compounds over time. The first month is strategy and foundation, and results build from there.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">Do you only work on LinkedIn?<span class="faq-toggle">+</span></div>
+        <div class="faq-q" onclick="faq(this, event)">Do you only work on LinkedIn?<span class="faq-toggle">+</span></div>
         <div class="faq-a">LinkedIn B2B content is our sweet spot, but the videos we create can be used anywhere including websites, email, Instagram, and YouTube Shorts. Tell us your use case and we will let you know how we can help.</div>
       </div>
     </div>
@@ -1021,8 +1021,8 @@ footer {
     <h2>Not Sure Which Package Fits?</h2>
     <p>Start with a free audit and we will tell you exactly what your brand needs.</p>
     <div class="btns">
-      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
-      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+      <a href="javascript:void(0)" class="btn btn-pink btn-lg" onclick="go('contact'); return false;">Get a Free Audit &rarr;</a>
+      <a href="javascript:void(0)" class="btn btn-ghost btn-lg" onclick="go('contact'); return false;">Book a Call</a>
     </div>
   </div>
 
@@ -1091,8 +1091,8 @@ footer {
     <h2>Want Results Like These for Your Brand?</h2>
     <p>Let us show you what we can do. Start with a free LinkedIn content audit.</p>
     <div class="btns">
-      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
-      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+      <a href="javascript:void(0)" class="btn btn-pink btn-lg" onclick="go('contact'); return false;">Get a Free Audit &rarr;</a>
+      <a href="javascript:void(0)" class="btn btn-ghost btn-lg" onclick="go('contact'); return false;">Book a Call</a>
     </div>
   </div>
 
@@ -1161,8 +1161,8 @@ footer {
     <h2>Want to Be in the Next Reel?</h2>
     <p>Start with a free audit and let us figure out your content story together.</p>
     <div class="btns">
-      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
-      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+      <a href="javascript:void(0)" class="btn btn-pink btn-lg" onclick="go('contact'); return false;">Get a Free Audit &rarr;</a>
+      <a href="javascript:void(0)" class="btn btn-ghost btn-lg" onclick="go('contact'); return false;">Book a Call</a>
     </div>
   </div>
 
@@ -1209,8 +1209,8 @@ footer {
             <option value="">Select a service...</option>
             <option>Free Content Audit (no commitment)</option>
             <option>Video Package (from $500 per video)</option>
-            <option>LinkedIn Profile Management (from $2,000/mo)</option>
-            <option>Full Team Presence (from $4,000/mo)</option>
+            <option>LinkedIn Profile Management (from $1,500/mo)</option>
+            <option>Full Team Presence (from $2,500/mo)</option>
             <option>Not sure yet, let's talk</option>
           </select>
         </div>
@@ -1228,7 +1228,7 @@ footer {
           <div class="tag tag-yellow">Free Offer</div>
           <div class="fb-title">Free LinkedIn Content Audit</div>
           <p class="fb-desc">We review your profile and content, then tell you exactly what is working, what is not, and what one change would make the biggest difference.</p>
-          <a href="#" class="btn btn-dark btn-sm">Claim Free Audit &rarr;</a>
+          <a href="javascript:void(0)" class="btn btn-dark btn-sm">Claim Free Audit &rarr;</a>
         </div>
 
         <a href="https://www.linkedin.com/company/arcade-mediamov" target="_blank" class="co-link">
@@ -1249,15 +1249,15 @@ footer {
     <div class="sec-head center fade"><div class="tag tag-pink">FAQ</div><h2 class="sec-title">Still Have Questions?</h2></div>
     <div class="faq-list">
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">How does the free audit work?<span class="faq-toggle">+</span></div>
+        <div class="faq-q" onclick="faq(this, event)">How does the free audit work?<span class="faq-toggle">+</span></div>
         <div class="faq-a">Select the free audit option in the form above. We review your LinkedIn profile and content, then jump on a short call to walk you through what is working, what is not, and what one change would make the biggest difference. No pitch, no pressure, just real feedback.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">How quickly do you respond?<span class="faq-toggle">+</span></div>
+        <div class="faq-q" onclick="faq(this, event)">How quickly do you respond?<span class="faq-toggle">+</span></div>
         <div class="faq-a">We aim to respond within 24 hours on business days. If you need to talk sooner, book a call directly using the Calendly link and find a time that works.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">What happens after the first call?<span class="faq-toggle">+</span></div>
+        <div class="faq-q" onclick="faq(this, event)">What happens after the first call?<span class="faq-toggle">+</span></div>
         <div class="faq-a">We will send you a clear proposal with the package that fits best, a rough content plan, and next steps. No pressure. We would rather take the time to make sure it is the right fit than rush you into something.</div>
       </div>
     </div>
@@ -1324,7 +1324,8 @@ function observe(){
 observe();
 
 // FAQ
-function faq(el){
+function faq(el, event){
+  if(event){ event.preventDefault(); event.stopPropagation(); }
   const item=el.parentElement;
   const wasOpen=item.classList.contains('open');
   document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
