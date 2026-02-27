@@ -574,32 +574,39 @@ footer {
 .port-card { border-radius:18px; overflow:hidden; }
 .port-card .card { border-radius:18px; }
 
-/* FIX: The iframe wrapper needs to block touch events from reaching any
-   parent onclick handlers. We achieve this by making the thumb a block
-   context that swallows touches via JS. */
+/* YouTube thumbnail embed — no iframe until user taps play */
 .port-thumb {
-  position:relative; width:100%; padding-bottom:56.25%; /* 16:9 */
-  background:#000;
-  /* This is the key fix: stop touch-action from scrolling/navigating */
-  touch-action: none;
+  position:relative; width:100%; padding-bottom:56.25%;
+  background:#000; cursor:pointer; overflow:hidden;
 }
+.port-thumb img {
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; display:block;
+  transition: transform .3s ease;
+}
+.port-thumb:hover img { transform: scale(1.03); }
 .port-thumb iframe {
   position:absolute; inset:0; width:100%; height:100%;
   border:none;
-  /* iframes must allow pointer events for playback */
-  pointer-events: auto;
 }
-/* Invisible overlay that sits on TOP of iframe on mobile to intercept
-   the first tap (activating the iframe), then removes itself so subsequent
-   taps go to the iframe. This prevents the tap-through-to-nav bug. */
-.iframe-tap-shield {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: transparent;
-  cursor: pointer;
-  touch-action: manipulation;
+.yt-play {
+  position:absolute; inset:0; display:flex;
+  align-items:center; justify-content:center;
+  z-index:2; pointer-events:none;
 }
+.yt-play-btn {
+  width:64px; height:44px;
+  background:rgba(0,0,0,0.75);
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  transition: background .2s, transform .2s;
+  pointer-events:none;
+}
+.port-thumb:hover .yt-play-btn {
+  background:#ff0000;
+  transform: scale(1.08);
+}
+.yt-play-btn svg { width:24px; height:24px; fill:white; }
 
 .port-info { padding:22px 24px; }
 .port-name { font-family:'Syne',sans-serif; font-weight:800; font-size:16px; margin-bottom:6px; color:var(--txt); }
@@ -1156,12 +1163,10 @@ footer {
   <div class="port-body">
     <div class="port-grid">
 
-      <!-- FIX: port-card no longer has onclick. The iframe-tap-shield intercepts
-           the first mobile tap to focus the iframe without triggering navigation. -->
       <div class="port-card card fade">
-        <div class="port-thumb">
-          <iframe src="https://www.youtube.com/embed/t96INkd3d-M" title="Upvert Brand Video 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          <div class="iframe-tap-shield" aria-hidden="true"></div>
+        <div class="port-thumb" onclick="playVideo(this,'t96INkd3d-M')">
+          <img src="https://img.youtube.com/vi/t96INkd3d-M/hqdefault.jpg" alt="Upvert Brand Video 1" loading="lazy">
+          <div class="yt-play"><div class="yt-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
         </div>
         <div class="port-info">
           <div class="tag tag-pink" style="margin-bottom:10px">Website Popup</div>
@@ -1171,9 +1176,9 @@ footer {
       </div>
 
       <div class="port-card card fade" style="transition-delay:.08s">
-        <div class="port-thumb">
-          <iframe src="https://www.youtube.com/embed/FkSvU2genRc" title="Upvert Brand Video 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          <div class="iframe-tap-shield" aria-hidden="true"></div>
+        <div class="port-thumb" onclick="playVideo(this,'FkSvU2genRc')">
+          <img src="https://img.youtube.com/vi/FkSvU2genRc/hqdefault.jpg" alt="Upvert Brand Video 2" loading="lazy">
+          <div class="yt-play"><div class="yt-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
         </div>
         <div class="port-info">
           <div class="tag tag-blue" style="margin-bottom:10px">Brand Video</div>
@@ -1183,9 +1188,9 @@ footer {
       </div>
 
       <div class="port-card card fade" style="transition-delay:.12s">
-        <div class="port-thumb">
-          <iframe src="https://www.youtube.com/embed/qbuieD9tTZQ" title="Warmly LinkedIn Organic" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          <div class="iframe-tap-shield" aria-hidden="true"></div>
+        <div class="port-thumb" onclick="playVideo(this,'qbuieD9tTZQ')">
+          <img src="https://img.youtube.com/vi/qbuieD9tTZQ/hqdefault.jpg" alt="Warmly LinkedIn Organic" loading="lazy">
+          <div class="yt-play"><div class="yt-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
         </div>
         <div class="port-info">
           <div class="tag tag-mint" style="margin-bottom:10px">LinkedIn Organic</div>
@@ -1195,9 +1200,9 @@ footer {
       </div>
 
       <div class="port-card card fade" style="transition-delay:.16s">
-        <div class="port-thumb">
-          <iframe src="https://www.youtube.com/embed/o7xonXptMO8" title="Warmly 2 LinkedIn Organic" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          <div class="iframe-tap-shield" aria-hidden="true"></div>
+        <div class="port-thumb" onclick="playVideo(this,'o7xonXptMO8')">
+          <img src="https://img.youtube.com/vi/o7xonXptMO8/hqdefault.jpg" alt="Warmly Vol 2" loading="lazy">
+          <div class="yt-play"><div class="yt-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
         </div>
         <div class="port-info">
           <div class="tag tag-mint" style="margin-bottom:10px">LinkedIn Organic</div>
@@ -1207,9 +1212,9 @@ footer {
       </div>
 
       <div class="port-card card fade" style="transition-delay:.20s">
-        <div class="port-thumb">
-          <iframe src="https://www.youtube.com/embed/RXaa1fKAfIo" title="IceWeb LinkedIn Organic" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          <div class="iframe-tap-shield" aria-hidden="true"></div>
+        <div class="port-thumb" onclick="playVideo(this,'RXaa1fKAfIo')">
+          <img src="https://img.youtube.com/vi/RXaa1fKAfIo/hqdefault.jpg" alt="IceWeb LinkedIn Organic" loading="lazy">
+          <div class="yt-play"><div class="yt-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
         </div>
         <div class="port-info">
           <div class="tag tag-blue" style="margin-bottom:10px">LinkedIn Organic</div>
@@ -1219,9 +1224,9 @@ footer {
       </div>
 
       <div class="port-card card fade" style="transition-delay:.24s">
-        <div class="port-thumb">
-          <iframe src="https://www.youtube.com/embed/94zospknUUc" title="RedBull National Winner" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          <div class="iframe-tap-shield" aria-hidden="true"></div>
+        <div class="port-thumb" onclick="playVideo(this,'94zospknUUc')">
+          <img src="https://img.youtube.com/vi/94zospknUUc/hqdefault.jpg" alt="RedBull National Winner" loading="lazy">
+          <div class="yt-play"><div class="yt-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
         </div>
         <div class="port-info">
           <div class="tag tag-yellow" style="margin-bottom:10px">National Winner</div>
@@ -1231,9 +1236,9 @@ footer {
       </div>
 
       <div class="port-card card fade" style="transition-delay:.28s">
-        <div class="port-thumb">
-          <iframe src="https://www.youtube.com/embed/-piNBuIGerQ" title="Arcade Outreach Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          <div class="iframe-tap-shield" aria-hidden="true"></div>
+        <div class="port-thumb" onclick="playVideo(this,'-piNBuIGerQ')">
+          <img src="https://img.youtube.com/vi/-piNBuIGerQ/hqdefault.jpg" alt="Arcade Outreach Video" loading="lazy">
+          <div class="yt-play"><div class="yt-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
         </div>
         <div class="port-info">
           <div class="tag tag-pink" style="margin-bottom:10px">Outreach Video</div>
@@ -1369,9 +1374,7 @@ footer {
 </div>
 
 <script>
-// ═══════════════════════════════════════
 // Particles
-// ═══════════════════════════════════════
 const pc = document.getElementById('particles');
 const pcols = ['#ff2d6f','#4dc9f0','#f5c800','#00c48c','#ff6230'];
 for(let i=0;i<30;i++){
@@ -1382,9 +1385,7 @@ for(let i=0;i<30;i++){
   pc.appendChild(p);
 }
 
-// ═══════════════════════════════════════
-// Navigation — always preventDefault + stopPropagation
-// ═══════════════════════════════════════
+// Navigation
 function navGo(e, name) {
   e.preventDefault();
   e.stopPropagation();
@@ -1398,23 +1399,13 @@ function go(name){
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   const el=document.getElementById('nl-'+name);
   if(el) el.classList.add('active');
-  setTimeout(()=>{
-    observe();
-    if(name === 'portfolio'){
-      document.querySelectorAll('.iframe-tap-shield').forEach(s=>{ s.style.display=''; });
-      initTapShields();
-    }
-  },50);
+  setTimeout(observe, 50);
 }
 
-// ═══════════════════════════════════════
-// Hamburger menu
-// ═══════════════════════════════════════
+// Hamburger
 function toggleMenu(){
-  const menu = document.getElementById('mobile-menu');
-  const burger = document.getElementById('hamburger');
-  menu.classList.toggle('open');
-  burger.classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
 }
 
 function goMobile(e, name){
@@ -1423,24 +1414,18 @@ function goMobile(e, name){
   go(name);
   document.getElementById('mobile-menu').classList.remove('open');
   document.getElementById('hamburger').classList.remove('open');
-  document.querySelectorAll('.mobile-menu a').forEach(a => a.classList.remove('active-mobile'));
 }
 
-// ═══════════════════════════════════════
-// Intersection observer for fade-in
-// ═══════════════════════════════════════
+// Fade-in observer
 function observe(){
   const ob=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
   },{threshold:.08});
   document.querySelectorAll('.fade:not(.in)').forEach(el=>ob.observe(el));
 }
 observe();
 
-// ═══════════════════════════════════════
-// FAQ — always stopPropagation so taps
-// don't bubble up to any parent handlers
-// ═══════════════════════════════════════
+// FAQ
 function faq(e, el){
   e.preventDefault();
   e.stopPropagation();
@@ -1450,37 +1435,24 @@ function faq(e, el){
   if(!wasOpen) item.classList.add('open');
 }
 
-// ═══════════════════════════════════════
-// iframe tap shield — mobile fix
-// On mobile, the first tap on an iframe doesn't
-// actually interact with it — it just "focuses" it.
-// This means the tap event can leak to parent elements
-// and accidentally trigger navigation.
-//
-// The shield sits on top of the iframe and absorbs
-// that first tap, then removes itself so subsequent
-// taps go directly to the iframe for playback control.
-// ═══════════════════════════════════════
-function initTapShields() {
-  document.querySelectorAll('.iframe-tap-shield').forEach(shield => {
-    shield.addEventListener('touchend', function(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      // Remove the shield so the next tap goes to the iframe
-      shield.style.display = 'none';
-    }, { passive: false });
-
-    shield.addEventListener('click', function(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      shield.style.display = 'none';
-    });
-  });
+// YouTube click-to-play
+// Replaces the thumbnail+play-button with a real iframe on click.
+// Because there is no iframe in the DOM until the user deliberately
+// taps the play button, there is zero chance of touch events leaking
+// out of an iframe and accidentally triggering page navigation.
+function playVideo(thumb, videoId) {
+  const iframe = document.createElement('iframe');
+  iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframe.allowFullscreen = true;
+  iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;';
+  // Remove thumbnail and play button, insert iframe
+  thumb.innerHTML = '';
+  thumb.appendChild(iframe);
+  // Remove the onclick so tapping the now-playing iframe does nothing to navigation
+  thumb.removeAttribute('onclick');
+  thumb.style.cursor = 'default';
 }
-
-// Run once on load
-initTapShields();
-
 </script>
 </body>
 </html>
