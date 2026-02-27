@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" fill="none">
+  <!-- Small cream inverted triangle - just the tip peeking out below the gem -->
+  <polygon points="35,72 65,72 50,112" fill="#f5ddb8"/>
+  <polygon points="35,72 50,92 50,112" fill="#e8c898"/>
+  <polygon points="65,72 50,92 50,112" fill="#d4b07a"/>
+
+  <!-- Red rhomboid gem on top - large, dominant -->
+  <polygon points="50,6 15,68 50,86" fill="#e8194a"/>
+  <polygon points="50,6 85,68 50,86" fill="#d94020"/>
+  <polygon points="15,68 85,68 50,86" fill="#c03010"/>
+  <!-- Inner left -->
+  <polygon points="50,22 28,62 50,74" fill="#f53d6e"/>
+  <!-- Inner right -->
+  <polygon points="50,22 72,62 50,74" fill="#f06040"/>
+  <!-- Inner bottom -->
+  <polygon points="28,62 72,62 50,74" fill="#e05030"/>
+  <!-- Top highlight -->
+  <polygon points="50,22 57,46 50,52 43,46" fill="#ff7060" opacity="0.45"/>
+</svg>
