@@ -481,16 +481,26 @@ footer {
   border-radius:14px; overflow:hidden;
   box-shadow:0 1px 8px rgba(0,0,0,.04);
 }
+/* FIX: Use button for FAQ trigger so it is a proper interactive element,
+   not a div — avoids mobile touch event confusion */
 .faq-q {
+  width:100%;
   padding:20px 24px; display:flex; justify-content:space-between; align-items:center;
   cursor:pointer; font-weight:700; font-size:15px; color:var(--txt);
   gap:16px; transition:background .2s;
+  background:transparent; border:none; text-align:left;
+  font-family:'Cabinet Grotesk', sans-serif;
+  /* Prevent touch from propagating to parent page navigation */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 .faq-q:hover { background:rgba(0,0,0,.02); }
 .faq-toggle {
   font-family:'Syne',sans-serif; font-weight:800; font-size:18px;
   color:var(--pink); flex-shrink:0; width:24px; text-align:center;
   transition:transform .25s;
+  pointer-events: none; /* Let clicks pass to the button, not the span */
 }
 .faq-a {
   display:none; padding:16px 24px 22px;
@@ -558,16 +568,37 @@ footer {
 
 .port-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:40px; }
 
+/* FIX: Port cards must NOT have onclick navigation — only the info section
+   below the video can have navigation links. Remove hover transform from
+   port-card so tap-to-play on iframe doesn't conflict with card interactions. */
 .port-card { border-radius:18px; overflow:hidden; }
 .port-card .card { border-radius:18px; }
 
+/* FIX: The iframe wrapper needs to block touch events from reaching any
+   parent onclick handlers. We achieve this by making the thumb a block
+   context that swallows touches via JS. */
 .port-thumb {
   position:relative; width:100%; padding-bottom:56.25%; /* 16:9 */
   background:#000;
+  /* This is the key fix: stop touch-action from scrolling/navigating */
+  touch-action: none;
 }
 .port-thumb iframe {
   position:absolute; inset:0; width:100%; height:100%;
   border:none;
+  /* iframes must allow pointer events for playback */
+  pointer-events: auto;
+}
+/* Invisible overlay that sits on TOP of iframe on mobile to intercept
+   the first tap (activating the iframe), then removes itself so subsequent
+   taps go to the iframe. This prevents the tap-through-to-nav bug. */
+.iframe-tap-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
 .port-info { padding:22px 24px; }
@@ -668,6 +699,8 @@ footer {
   padding: 10px;
   cursor: pointer;
   z-index: 901;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .hamburger span {
   display: block;
@@ -706,6 +739,8 @@ footer {
   padding: 14px 16px;
   border-radius: 10px;
   transition: color .2s, background .2s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .mobile-menu a:hover { color: white; background: rgba(255,255,255,.06); }
 .mobile-menu a.active-mobile { color: white; }
@@ -736,6 +771,11 @@ footer {
   .pricing-grid { grid-template-columns:1fr; }
   .modal-body { padding:24px 20px 32px; }
   .modal-header { padding:28px 24px 24px; }
+
+  /* On mobile, cards should not have hover lift effect —
+     it can interfere with touch interactions */
+  .card:hover { transform: none; box-shadow: 0 2px 20px rgba(0,0,0,.05); }
+  .port-card .card:hover { transform: none; }
 }
 </style>
 </head>
@@ -766,11 +806,11 @@ footer {
   </div>
 
   <ul class="nav-links">
-    <li><a href="#" onclick="go('home')"      id="nl-home"      class="active">Home</a></li>
-    <li><a href="#" onclick="go('services')"  id="nl-services">Services</a></li>
-    <li><a href="#" onclick="go('about')"     id="nl-about">About</a></li>
-    <li><a href="#" onclick="go('portfolio')" id="nl-portfolio">Work</a></li>
-    <li><a href="#" onclick="go('contact')"   id="nl-contact" class="nav-cta">Book a Call</a></li>
+    <li><a href="#" onclick="navGo(event,'home')"      id="nl-home"      class="active">Home</a></li>
+    <li><a href="#" onclick="navGo(event,'services')"  id="nl-services">Services</a></li>
+    <li><a href="#" onclick="navGo(event,'about')"     id="nl-about">About</a></li>
+    <li><a href="#" onclick="navGo(event,'portfolio')" id="nl-portfolio">Work</a></li>
+    <li><a href="#" onclick="navGo(event,'contact')"   id="nl-contact" class="nav-cta">Book a Call</a></li>
   </ul>
 
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -780,11 +820,11 @@ footer {
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#" onclick="goMobile('home')">Home</a>
-  <a href="#" onclick="goMobile('services')">Services</a>
-  <a href="#" onclick="goMobile('about')">About</a>
-  <a href="#" onclick="goMobile('portfolio')">Work</a>
-  <a href="#" onclick="goMobile('contact')" class="mobile-cta">Book a Call</a>
+  <a href="#" onclick="goMobile(event,'home')">Home</a>
+  <a href="#" onclick="goMobile(event,'services')">Services</a>
+  <a href="#" onclick="goMobile(event,'about')">About</a>
+  <a href="#" onclick="goMobile(event,'portfolio')">Work</a>
+  <a href="#" onclick="goMobile(event,'contact')" class="mobile-cta">Book a Call</a>
 </div>
 
 <!-- ════════════════════════════════════
@@ -813,8 +853,8 @@ footer {
       </p>
 
       <div class="hero-btns">
-        <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
-        <a href="#" class="btn btn-ghost btn-lg" onclick="go('services')">See What We Do</a>
+        <a href="#" class="btn btn-pink btn-lg" onclick="navGo(event,'contact')">Get a Free Audit &rarr;</a>
+        <a href="#" class="btn btn-ghost btn-lg" onclick="navGo(event,'services')">See What We Do</a>
       </div>
 
       <div class="hero-stats">
@@ -878,8 +918,8 @@ footer {
     <h2>Ready to Stop Blending In?</h2>
     <p>Book a free content audit and we will tell you exactly what is holding your LinkedIn back.</p>
     <div class="btns">
-      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get Your Free Audit &rarr;</a>
-      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+      <a href="#" class="btn btn-pink btn-lg" onclick="navGo(event,'contact')">Get Your Free Audit &rarr;</a>
+      <a href="#" class="btn btn-ghost btn-lg" onclick="navGo(event,'contact')">Book a Call</a>
     </div>
   </div>
 
@@ -920,7 +960,7 @@ footer {
           <span class="sp-num">$500</span>
           <span class="sp-per">/ video</span>
         </div>
-        <a href="#" class="svc-btn sb-pink" onclick="go('contact')">Get Videos &rarr;</a>
+        <a href="#" class="svc-btn sb-pink" onclick="navGo(event,'contact')">Get Videos &rarr;</a>
       </div>
 
       <div class="svc-card fade" style="transition-delay:.1s">
@@ -941,7 +981,7 @@ footer {
           <span class="sp-num">$1,500</span>
           <span class="sp-per">/ month</span>
         </div>
-        <a href="#" class="svc-btn sb-blue" onclick="go('contact')">Get Started &rarr;</a>
+        <a href="#" class="svc-btn sb-blue" onclick="navGo(event,'contact')">Get Started &rarr;</a>
       </div>
 
       <div class="svc-card fade" style="transition-delay:.2s">
@@ -961,7 +1001,7 @@ footer {
           <span class="sp-num">$2,500</span>
           <span class="sp-per">/ month</span>
         </div>
-        <a href="#" class="svc-btn sb-mint" onclick="go('contact')">Go Full Team &rarr;</a>
+        <a href="#" class="svc-btn sb-mint" onclick="navGo(event,'contact')">Go Full Team &rarr;</a>
       </div>
 
     </div>
@@ -989,27 +1029,27 @@ footer {
     <div class="sec-head center fade"><div class="tag tag-pink">FAQ</div><h2 class="sec-title">Common Questions</h2></div>
     <div class="faq-list" style="max-width:720px;margin:0 auto 0;">
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">Do I need to be on camera?<span class="faq-toggle">+</span></div>
+        <button class="faq-q" onclick="faq(event,this)">Do I need to be on camera?<span class="faq-toggle">+</span></button>
         <div class="faq-a">Nope. We will be the faces on screen. That is kind of our thing. That said, if you ever want to show up occasionally, a quick clip, some B-roll, or a voiceover — we will write the script, direct you, and handle all the editing. But it is completely up to you.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">How long until I get the first videos?<span class="faq-toggle">+</span></div>
+        <button class="faq-q" onclick="faq(event,this)">How long until I get the first videos?<span class="faq-toggle">+</span></button>
         <div class="faq-a">For video packages, turnaround is typically 7 to 10 business days after we align on the brief and you send the raw material. For management packages, we spend the first week on strategy and planning before anything goes live.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">What if I have no footage yet?<span class="faq-toggle">+</span></div>
+        <button class="faq-q" onclick="faq(event,this)">What if I have no footage yet?<span class="faq-toggle">+</span></button>
         <div class="faq-a">Honestly, that is a good thing. A clean slate means we build everything from scratch, exactly how it should be. No old habits to undo.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">Can the videos be used for paid ads too?<span class="faq-toggle">+</span></div>
+        <button class="faq-q" onclick="faq(event,this)">Can the videos be used for paid ads too?<span class="faq-toggle">+</span></button>
         <div class="faq-a">Absolutely. We design videos that work as high-quality ad creatives, not generic stock-footage ads. Whether it is LinkedIn ads, website popups, or email campaigns, we build each video for its intended purpose.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">Is there a minimum commitment for management?<span class="faq-toggle">+</span></div>
+        <button class="faq-q" onclick="faq(event,this)">Is there a minimum commitment for management?<span class="faq-toggle">+</span></button>
         <div class="faq-a">We ask for a minimum of 3 months. Good content compounds over time. The first month is strategy and foundation, and results build from there.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">Do you only work on LinkedIn?<span class="faq-toggle">+</span></div>
+        <button class="faq-q" onclick="faq(event,this)">Do you only work on LinkedIn?<span class="faq-toggle">+</span></button>
         <div class="faq-a">LinkedIn B2B content is our sweet spot, but the videos we create can be used anywhere including websites, email, Instagram, and YouTube Shorts. Tell us your use case and we will let you know how we can help.</div>
       </div>
     </div>
@@ -1021,8 +1061,8 @@ footer {
     <h2>Not Sure Which Package Fits?</h2>
     <p>Start with a free audit and we will tell you exactly what your brand needs.</p>
     <div class="btns">
-      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
-      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+      <a href="#" class="btn btn-pink btn-lg" onclick="navGo(event,'contact')">Get a Free Audit &rarr;</a>
+      <a href="#" class="btn btn-ghost btn-lg" onclick="navGo(event,'contact')">Book a Call</a>
     </div>
   </div>
 
@@ -1091,8 +1131,8 @@ footer {
     <h2>Want Results Like These for Your Brand?</h2>
     <p>Let us show you what we can do. Start with a free LinkedIn content audit.</p>
     <div class="btns">
-      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
-      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+      <a href="#" class="btn btn-pink btn-lg" onclick="navGo(event,'contact')">Get a Free Audit &rarr;</a>
+      <a href="#" class="btn btn-ghost btn-lg" onclick="navGo(event,'contact')">Book a Call</a>
     </div>
   </div>
 
@@ -1116,9 +1156,12 @@ footer {
   <div class="port-body">
     <div class="port-grid">
 
+      <!-- FIX: port-card no longer has onclick. The iframe-tap-shield intercepts
+           the first mobile tap to focus the iframe without triggering navigation. -->
       <div class="port-card card fade">
         <div class="port-thumb">
           <iframe src="https://www.youtube.com/embed/t96INkd3d-M" title="Upvert Brand Video 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <div class="iframe-tap-shield" aria-hidden="true"></div>
         </div>
         <div class="port-info">
           <div class="tag tag-pink" style="margin-bottom:10px">Website Popup</div>
@@ -1130,6 +1173,7 @@ footer {
       <div class="port-card card fade" style="transition-delay:.08s">
         <div class="port-thumb">
           <iframe src="https://www.youtube.com/embed/FkSvU2genRc" title="Upvert Brand Video 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <div class="iframe-tap-shield" aria-hidden="true"></div>
         </div>
         <div class="port-info">
           <div class="tag tag-blue" style="margin-bottom:10px">Brand Video</div>
@@ -1141,6 +1185,7 @@ footer {
       <div class="port-card card fade" style="transition-delay:.12s">
         <div class="port-thumb">
           <iframe src="https://www.youtube.com/embed/qbuieD9tTZQ" title="Warmly LinkedIn Organic" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <div class="iframe-tap-shield" aria-hidden="true"></div>
         </div>
         <div class="port-info">
           <div class="tag tag-mint" style="margin-bottom:10px">LinkedIn Organic</div>
@@ -1152,6 +1197,7 @@ footer {
       <div class="port-card card fade" style="transition-delay:.16s">
         <div class="port-thumb">
           <iframe src="https://www.youtube.com/embed/o7xonXptMO8" title="Warmly 2 LinkedIn Organic" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <div class="iframe-tap-shield" aria-hidden="true"></div>
         </div>
         <div class="port-info">
           <div class="tag tag-mint" style="margin-bottom:10px">LinkedIn Organic</div>
@@ -1163,6 +1209,7 @@ footer {
       <div class="port-card card fade" style="transition-delay:.20s">
         <div class="port-thumb">
           <iframe src="https://www.youtube.com/embed/RXaa1fKAfIo" title="IceWeb LinkedIn Organic" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <div class="iframe-tap-shield" aria-hidden="true"></div>
         </div>
         <div class="port-info">
           <div class="tag tag-blue" style="margin-bottom:10px">LinkedIn Organic</div>
@@ -1174,6 +1221,7 @@ footer {
       <div class="port-card card fade" style="transition-delay:.24s">
         <div class="port-thumb">
           <iframe src="https://www.youtube.com/embed/94zospknUUc" title="RedBull National Winner" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <div class="iframe-tap-shield" aria-hidden="true"></div>
         </div>
         <div class="port-info">
           <div class="tag tag-yellow" style="margin-bottom:10px">National Winner</div>
@@ -1185,6 +1233,7 @@ footer {
       <div class="port-card card fade" style="transition-delay:.28s">
         <div class="port-thumb">
           <iframe src="https://www.youtube.com/embed/-piNBuIGerQ" title="Arcade Outreach Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <div class="iframe-tap-shield" aria-hidden="true"></div>
         </div>
         <div class="port-info">
           <div class="tag tag-pink" style="margin-bottom:10px">Outreach Video</div>
@@ -1195,7 +1244,8 @@ footer {
 
     </div>
 
-    <div class="port-soon<div class="port-soon fade">
+    <!-- FIX: Fixed broken HTML tag (was: <div class="port-soon<div class="port-soon fade">) -->
+    <div class="port-soon fade">
       <p>MORE WORK COMING SOON<br><br>We are just getting started. Check back soon, or better yet, be in the next reel.</p>
     </div>
   </div>
@@ -1205,14 +1255,14 @@ footer {
     <h2>Want to Be in the Next Reel?</h2>
     <p>Start with a free audit and let us figure out your content story together.</p>
     <div class="btns">
-      <a href="#" class="btn btn-pink btn-lg" onclick="go('contact')">Get a Free Audit &rarr;</a>
-      <a href="#" class="btn btn-ghost btn-lg" onclick="go('contact')">Book a Call</a>
+      <a href="#" class="btn btn-pink btn-lg" onclick="navGo(event,'contact')">Get a Free Audit &rarr;</a>
+      <a href="#" class="btn btn-ghost btn-lg" onclick="navGo(event,'contact')">Book a Call</a>
     </div>
   </div>
 
   <footer>
     <div class="foot-logo"><span class="a1">A</span>RCADE</div>
-    <div class="foot-copy">&copy; 2025 Arcade. B2B content that actually works.</div>
+    <div class="foot-copy">&copy; 2026 Arcade. B2B content that actually works.</div>
   </footer>
 </div>
 
@@ -1298,15 +1348,15 @@ footer {
     <div class="sec-head center fade"><div class="tag tag-pink">FAQ</div><h2 class="sec-title">Still Have Questions?</h2></div>
     <div class="faq-list">
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">How does the free audit work?<span class="faq-toggle">+</span></div>
+        <button class="faq-q" onclick="faq(event,this)">How does the free audit work?<span class="faq-toggle">+</span></button>
         <div class="faq-a">Select the free audit option in the form above. We review your LinkedIn profile and content, then jump on a short call to walk you through what is working, what is not, and what one change would make the biggest difference. No pitch, no pressure, just real feedback.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">How quickly do you respond?<span class="faq-toggle">+</span></div>
+        <button class="faq-q" onclick="faq(event,this)">How quickly do you respond?<span class="faq-toggle">+</span></button>
         <div class="faq-a">We aim to respond within 24 hours on business days. If you need to talk sooner, book a call directly using the Calendly link and find a time that works.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q" onclick="faq(this)">What happens after the first call?<span class="faq-toggle">+</span></div>
+        <button class="faq-q" onclick="faq(event,this)">What happens after the first call?<span class="faq-toggle">+</span></button>
         <div class="faq-a">We will send you a clear proposal with the package that fits best, a rough content plan, and next steps. No pressure. We would rather take the time to make sure it is the right fit than rush you into something.</div>
       </div>
     </div>
@@ -1319,7 +1369,9 @@ footer {
 </div>
 
 <script>
+// ═══════════════════════════════════════
 // Particles
+// ═══════════════════════════════════════
 const pc = document.getElementById('particles');
 const pcols = ['#ff2d6f','#4dc9f0','#f5c800','#00c48c','#ff6230'];
 for(let i=0;i<30;i++){
@@ -1330,24 +1382,15 @@ for(let i=0;i<30;i++){
   pc.appendChild(p);
 }
 
-// Hamburger menu
-function toggleMenu(){
-  const menu = document.getElementById('mobile-menu');
-  const burger = document.getElementById('hamburger');
-  const isOpen = menu.classList.contains('open');
-  menu.classList.toggle('open');
-  burger.classList.toggle('open');
-  document.body.style.overflow = isOpen ? '' : '';
-}
-function goMobile(name){
+// ═══════════════════════════════════════
+// Navigation — always preventDefault + stopPropagation
+// ═══════════════════════════════════════
+function navGo(e, name) {
+  e.preventDefault();
+  e.stopPropagation();
   go(name);
-  document.getElementById('mobile-menu').classList.remove('open');
-  document.getElementById('hamburger').classList.remove('open');
-  // update active state in mobile menu
-  document.querySelectorAll('.mobile-menu a').forEach(a => a.classList.remove('active-mobile'));
 }
 
-// Page navigation
 function go(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('pg-'+name).classList.add('active');
@@ -1356,14 +1399,32 @@ function go(name){
   const el=document.getElementById('nl-'+name);
   if(el) el.classList.add('active');
   setTimeout(()=>{
-    document.querySelectorAll('#pg-'+name+' .fade:not(.in)').forEach(el=>{
-      el.classList.remove('in'); void el.offsetWidth;
-    });
     observe();
   },50);
 }
 
+// ═══════════════════════════════════════
+// Hamburger menu
+// ═══════════════════════════════════════
+function toggleMenu(){
+  const menu = document.getElementById('mobile-menu');
+  const burger = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  burger.classList.toggle('open');
+}
+
+function goMobile(e, name){
+  e.preventDefault();
+  e.stopPropagation();
+  go(name);
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.querySelectorAll('.mobile-menu a').forEach(a => a.classList.remove('active-mobile'));
+}
+
+// ═══════════════════════════════════════
 // Intersection observer for fade-in
+// ═══════════════════════════════════════
 function observe(){
   const ob=new IntersectionObserver(entries=>{
     entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});
@@ -1372,13 +1433,64 @@ function observe(){
 }
 observe();
 
-// FAQ
-function faq(el){
-  const item=el.parentElement;
-  const wasOpen=item.classList.contains('open');
+// ═══════════════════════════════════════
+// FAQ — always stopPropagation so taps
+// don't bubble up to any parent handlers
+// ═══════════════════════════════════════
+function faq(e, el){
+  e.preventDefault();
+  e.stopPropagation();
+  const item = el.closest('.faq-item');
+  const wasOpen = item.classList.contains('open');
   document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!wasOpen)item.classList.add('open');
+  if(!wasOpen) item.classList.add('open');
 }
+
+// ═══════════════════════════════════════
+// iframe tap shield — mobile fix
+// On mobile, the first tap on an iframe doesn't
+// actually interact with it — it just "focuses" it.
+// This means the tap event can leak to parent elements
+// and accidentally trigger navigation.
+//
+// The shield sits on top of the iframe and absorbs
+// that first tap, then removes itself so subsequent
+// taps go directly to the iframe for playback control.
+// ═══════════════════════════════════════
+function initTapShields() {
+  document.querySelectorAll('.iframe-tap-shield').forEach(shield => {
+    shield.addEventListener('touchend', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      // Remove the shield so the next tap goes to the iframe
+      shield.style.display = 'none';
+    }, { passive: false });
+
+    shield.addEventListener('click', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      shield.style.display = 'none';
+    });
+  });
+}
+
+// Re-init shields whenever we navigate to portfolio
+// (shields may have been dismissed previously)
+const _origGo = go;
+function go(name) {
+  _origGo(name);
+  if (name === 'portfolio') {
+    // Reset all shields when returning to portfolio
+    setTimeout(() => {
+      document.querySelectorAll('.iframe-tap-shield').forEach(s => {
+        s.style.display = '';
+      });
+      initTapShields();
+    }, 60);
+  }
+}
+// Run once on load
+initTapShields();
 
 </script>
 </body>
