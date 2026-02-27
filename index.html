@@ -581,8 +581,11 @@ footer {
 .port-card .card { border-radius:18px; }
 
 .port-thumb {
-  height:200px; display:flex; align-items:center; justify-content:center;
-  position:relative;
+  position:relative; width:100%; padding-bottom:177.78%; /* 9:16 for Shorts */
+  background:#000;
+}
+.port-thumb iframe {
+  position:absolute; inset:0; width:100%; height:100%; border:none;
 }
 .pt-1 { background:linear-gradient(135deg,#ffe5ed,#ffc4d4); }
 .pt-2 { background:linear-gradient(135deg,#dde6ff,#b8caff); }
@@ -695,78 +698,30 @@ footer {
   .rb-block { padding:40px 24px; }
 }
 
-/* ═══════════════════════════════════════
-   MOBILE NAV
-═══════════════════════════════════════ */
+/* Mobile nav */
 .hamburger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  width: 40px; height: 40px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 10px;
-  padding: 10px;
-  cursor: pointer;
-  flex-shrink: 0;
+  display: none; flex-direction: column; justify-content: center;
+  gap: 5px; width: 40px; height: 40px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px; padding: 10px; cursor: pointer; z-index: 901;
 }
-.hamburger span {
-  display: block;
-  width: 100%; height: 2px;
-  background: white; border-radius: 2px;
-  transition: transform .3s, opacity .3s;
-}
+.hamburger span { display:block; width:100%; height:2px; background:white; border-radius:2px; transition:transform .3s,opacity .3s; }
 .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; }
 .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
 .mobile-menu {
-  display: none;
-  position: fixed;
-  top: 68px; left: 0; right: 0;
-  background: rgba(10,10,20,0.98);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  flex-direction: column;
-  padding: 12px 20px 20px;
-  gap: 4px;
-  z-index: 899;
-  opacity: 0;
-  transform: translateY(-8px);
-  transition: opacity .25s ease, transform .25s ease;
-  pointer-events: none;
+  display: none; position: fixed; top: 68px; left: 0; right: 0;
+  background: rgba(10,10,20,0.98); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,.07); flex-direction: column;
+  padding: 16px 24px 24px; gap: 4px; z-index: 899;
+  opacity: 0; transform: translateY(-10px);
+  transition: transform .25s ease, opacity .25s ease;
 }
-.mobile-menu.open {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: all;
-}
-.mobile-menu a {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700; font-size: 16px;
-  color: rgba(255,255,255,.6);
-  padding: 14px 16px;
-  border-radius: 10px;
-  transition: color .2s, background .2s;
-  text-decoration: none;
-  display: block;
-}
-.mobile-menu a:hover, .mobile-menu a.active-mobile { color: white; background: rgba(255,255,255,.06); }
-.mobile-menu .mob-cta {
-  margin-top: 8px;
-  background: var(--pink);
-  color: white !important;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 4px 14px rgba(255,45,111,.3);
-}
-
-@media(max-width:900px){
-  .hamburger { display: flex; }
-  .mobile-menu { display: flex; }
-  .nav-links { display: none; }
-}
+.mobile-menu.open { transform: translateY(0); opacity: 1; }
+.mobile-menu a { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:rgba(255,255,255,.6); padding:14px 16px; border-radius:10px; transition:color .2s,background .2s; display:block; text-decoration:none; }
+.mobile-menu a:hover, .mobile-menu a.active-mobile { color:white; background:rgba(255,255,255,.06); }
+.mobile-menu .mobile-cta { margin-top:8px; background:var(--pink); color:white !important; text-align:center; box-shadow:0 4px 14px rgba(255,45,111,.3); border-radius:10px; }
+@media(max-width:900px){ .hamburger { display:flex; } .mobile-menu { display:flex; } .nav-links { display:none; } }
 
 </style>
 </head>
@@ -808,18 +763,17 @@ footer {
     <li><a href="#" onclick="go('portfolio')" id="nl-portfolio">Work</a></li>
     <li><a href="#" onclick="go('contact')"   id="nl-contact" class="nav-cta">Book a Call</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- Mobile Menu -->
 <div class="mobile-menu" id="mobile-menu">
   <a href="#" onclick="goMobile('home')">Home</a>
   <a href="#" onclick="goMobile('services')">Services</a>
   <a href="#" onclick="goMobile('about')">About</a>
   <a href="#" onclick="goMobile('portfolio')">Work</a>
-  <a href="#" onclick="goMobile('contact')" class="mob-cta">Book a Call</a>
+  <a href="#" onclick="goMobile('contact')" class="mobile-cta">Book a Call</a>
 </div>
 
 <!-- ════════════════════════════════════
@@ -844,7 +798,7 @@ footer {
       </h1>
 
       <p class="hero-sub">
-        We make short-form video content and manage LinkedIn profiles for B2B brands that are done blending into the feed.
+        Short-form video and LinkedIn content for B2B brands that are done blending into the feed.
       </p>
 
       <div class="hero-btns">
@@ -854,7 +808,7 @@ footer {
 
       <div class="hero-stats">
         <div class="hs-item">
-          <span class="hs-num p">11M</span>
+          <span class="hs-num p">20M+</span>
           <span class="hs-lbl">Organic Views</span>
         </div>
         <div class="hs-item">
@@ -1035,7 +989,7 @@ footer {
     <div class="faq-list" style="max-width:720px;margin:0 auto 0;">
       <div class="faq-item">
         <div class="faq-q" onclick="faq(this)">Do I need to be on camera?<span class="faq-toggle">+</span></div>
-        <div class="faq-a">We will be the ones on camera for your content. That said, if you ever feel comfortable showing up occasionally, even just for B-roll, a voiceover, or a quick clip with a script we write and edit, it can add a great personal touch. But it is never a requirement.</div>
+        <div class="faq-a">Nope. We will be the faces on screen. That is kind of our thing. That said, if you ever want to show up occasionally, a quick clip, some B-roll, or a voiceover — we will write the script, direct you, and handle all the editing. But it is completely up to you.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="faq(this)">How long until I get the first videos?<span class="faq-toggle">+</span></div>
@@ -1095,11 +1049,11 @@ footer {
         <div class="ava ava-s">🎬</div>
         <div class="abt-name">Sofija</div>
         <div class="abt-role role-p">Video and Content Specialist</div>
-        <p class="abt-bio">It started with crochet plushies. One video hit 11 million views in my first month and sold over 1,000 patterns from a hobby account. That is when I got obsessed with what makes content actually stop people.<br><br>Since then I have made videos for a startup called Upvert that still run on their website and email campaigns, and I now run the full LinkedIn content operation for IceWeb as their content specialist contractor. I also edit everything. No outsourcing, no shortcuts.</p>
+        <p class="abt-bio">It started with crochet plushies. One video hit 11 million views in my very first month, and before long I had built up 20 million views and 18,000 followers, selling over 1,000 patterns along the way. That is when I stopped treating content as something you just post and started treating it as something you engineer.<br><br>From there I transitioned into the B2B world, started making content for brands, and completely fell in love with it. I found that every brand has a story worth watching. Most just need someone to tell it.</p>
         <div class="abt-chips">
-          <span class="chip">11M Views</span>
+          <span class="chip">20M+ Views</span>
+          <span class="chip">18K Followers</span>
           <span class="chip">1K+ Sales</span>
-          <span class="chip">IceWeb</span>
           <span class="chip">Video Editor</span>
         </div>
       </div>
@@ -1190,7 +1144,7 @@ footer {
         <div class="port-info">
           <div class="tag tag-mint" style="margin-bottom:10px">LinkedIn Organic</div>
           <div class="port-name">Warmly</div>
-          <p class="port-desc">LinkedIn organic content for Warmly — built to stop the scroll and drive inbound interest.</p>
+          <p class="port-desc">LinkedIn organic content for Warmly, built to stop the scroll and drive inbound interest.</p>
         </div>
       </div>
 
@@ -1277,6 +1231,7 @@ footer {
 
       <div class="form-card card fade">
         <h3>Send a Message</h3>
+        <form action="https://formspree.io/f/xwvnyjnr" method="POST">
         <div class="fg-row fg">
           <div>
             <label>Your Name</label>
@@ -1306,7 +1261,8 @@ footer {
           <label>Anything Else?</label>
           <textarea placeholder="Tell us about your brand, your goals, or what is not working right now..."></textarea>
         </div>
-        <button class="form-submit" id="fsub">Send Message &rarr;</button>
+        <button type="submit" class="form-submit">Send Message &rarr;</button>
+        </form>
       </div>
 
       <div class="contact-sidebar fade" style="transition-delay:.12s">
@@ -1374,6 +1330,19 @@ for(let i=0;i<30;i++){
   pc.appendChild(p);
 }
 
+// Hamburger
+function toggleMenu(){
+  const menu=document.getElementById('mobile-menu');
+  const burger=document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  burger.classList.toggle('open');
+}
+function goMobile(name){
+  go(name);
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
 // Page navigation
 function go(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1413,21 +1382,6 @@ document.getElementById('fsub').addEventListener('click',function(){
   this.style.background='#00c48c';
   setTimeout(()=>{this.textContent='Send Message →';this.style.background='';},3000);
 });
-
-// Hamburger menu
-function toggleMenu() {
-  const menu = document.getElementById('mobile-menu');
-  const burger = document.getElementById('hamburger');
-  menu.classList.toggle('open');
-  burger.classList.toggle('open');
-}
-
-function goMobile(name) {
-  go(name);
-  document.getElementById('mobile-menu').classList.remove('open');
-  document.getElementById('hamburger').classList.remove('open');
-}
-
 </script>
 </body>
 </html>
