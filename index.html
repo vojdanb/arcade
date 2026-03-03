@@ -186,7 +186,7 @@ nav.scrolled { background:rgba(115,150,255,.97); }
 .particle  { position:absolute; border-radius:50%; animation:pdrift linear infinite; }
 @keyframes pdrift { to { transform:translateY(-110vh) rotate(360deg); opacity:0; } }
 
-.hero-inner { position:relative; z-index:2; max-width:880px; }
+.hero-inner { position:relative; z-index:2; max-width:1200px; }
 
 .hero-badge {
   display:inline-flex; align-items:center; gap:8px;
@@ -202,7 +202,7 @@ nav.scrolled { background:rgba(115,150,255,.97); }
 @keyframes pulse { 50% { opacity:.35; transform:scale(.6); } }
 
 .hero h1 {
-  font-size:clamp(72px,17vw,210px);
+  font-size:clamp(38px,6vw,96px);
   color:#fff; letter-spacing:-.02em;
   text-shadow:0 4px 40px rgba(60,95,224,.2);
   margin-bottom:6px;
@@ -665,8 +665,8 @@ footer {
 
   <div class="hero-inner fade" style="opacity:1;transform:none">
     <div class="hero-badge">🎮 B2B Content Agency</div>
-    <h1>
-      <span class="h1-white">Content your buyers</span>
+    <h1 style="font-size:clamp(38px,6vw,96px)!important">
+      <span class="h1-white" style="white-space:nowrap">Content your buyers</span>
       <span class="h1-grad"><span id="tw">can't scroll past</span><span class="tw-cursor">|</span></span>
     </h1>
     <p class="hero-sub">Short form video and LinkedIn content for B2B brands that are done blending into the feed.</p>
